@@ -1,59 +1,57 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native'
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 
 export default function HomeScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View style={styles.appContainer}>
+      <View style={styles.headerContainer}>
+        <View style={styles.headerLeftContainer}>
+          <Image source={require('@/assets/images/logo.png')} style={styles.reactLogo} />
+          <Text style={styles.logoTitle}> Flux </Text>
+        </View>
+        <View style={styles.headerRigthContainer}>
+          <Image source={require('@/assets/images/alert-icon.png')} style={styles.alertIcon} />
+          <Image source={require('@/assets/images/profile-pic.png')} style={styles.profilePic} />
+        </View>
+      </View>
+      <View style={styles.mainContentContainer}>
+        <View style={styles.periodContainer}>
+          <Text style={styles.mainContentsmall}>Este mês</Text>
+          <Image source={require('@/assets/images/chevron-down.png')} style={styles.reactLogo} />
+        </View>
+        <View style={styles.currentBalanceContainer}>
+          <Text style={styles.mainContentLarge}>R$ 1.324,90</Text>
+        </View>
+        <View style={styles.incomeExpensesContainer}>
+          <Text style={{...styles.mainContentMedium, color: '#0FB50C'}}>+ $ 6.234,28</Text>
+          <Text style={{...styles.mainContentMedium, color: '#B50C0C'}}>- $ 4.913,93</Text>
+        </View>
+        <View style={styles.analitcsContainer}>
+          <Text style={styles.analitcsTitle}>Analitcs</Text>
+          <View style={styles.analitcsCardContainer}>
+            <View style={styles.analitcsCard}>
+              <View style={{width: 44, height:44, borderColor: '#fff', borderWidth: 1, borderRadius: 22, alignItems: 'center', justifyContent: 'center'}}>
+                <Text style={styles.analitcsCardTitle}>49%</Text>
+              </View>
+              <Text style={styles.analitcsCardDescription}>Mercado</Text>
+              <Text style={styles.analitcsCardDescription}>R$ 628,90</Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  appContainer: {
+    backgroundColor: 'white',
+    height: '100%',
+  },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 80,
     gap: 8,
   },
   stepContainer: {
@@ -61,10 +59,96 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+    height: 24,
+  },
+  logoTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  alertIcon: {
+    height: 24,
+  },
+  profilePic: {
+    height: 48,
+  },
+  headerContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 16,
+    marginTop: 32,
+  },
+  headerLeftContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  headerRigthContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
+  mainContentContainer: {
+    padding: 16,
+    gap: 16,
+  },
+  mainContentsmall: {
+    fontSize: 16,
+    fontWeight: 'light',
+  },
+  periodContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  currentBalanceContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mainContentLarge: {
+    fontSize: 40,
+    fontWeight: 'semibold',
+  },
+  incomeExpensesContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 16,
+  },
+  mainContentMedium: {
+    fontSize: 20,
+    fontWeight: 'regular',
+  },
+  analitcsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    gap: 16,
+  },
+  analitcsTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  analitcsCardContainer: {},
+  analitcsCardDescription: {
+    color: '#fff',
+  },
+  analitcsCard: {
+    backgroundColor: '#262626',
+    padding: 16,
+    borderRadius: 8,
+    gap: 8,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  analitcsCardTitle: {
+    color: '#fff',
   },
 });
