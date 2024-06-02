@@ -1,7 +1,13 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
+import React, { useMemo } from 'react'
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+
 
 
 export default function HomeScreen() {
+
+  const snapPoints = useMemo(() => ['30%', '82%'], []);
+
   return (
     <View style={styles.appContainer}>
       <View style={styles.headerContainer}>
@@ -28,17 +34,55 @@ export default function HomeScreen() {
         </View>
         <View style={styles.analitcsContainer}>
           <Text style={styles.analitcsTitle}>Analitcs</Text>
-          <View style={styles.analitcsCardContainer}>
-            <View style={styles.analitcsCard}>
-              <View style={{width: 44, height:44, borderColor: '#fff', borderWidth: 1, borderRadius: 22, alignItems: 'center', justifyContent: 'center'}}>
-                <Text style={styles.analitcsCardTitle}>49%</Text>
-              </View>
-              <Text style={styles.analitcsCardDescription}>Mercado</Text>
-              <Text style={styles.analitcsCardDescription}>R$ 628,90</Text>
-            </View>
-          </View>
+          <ScrollView
+            horizontal={true}
+            contentContainerStyle={styles.analitcsCardContainer}
+            showsHorizontalScrollIndicator={false}
+          >
+            {
+              [
+                {
+                  percentage: '49',
+                  description: 'Mercado',
+                  value: '628.90',
+                },
+                {
+                  percentage: '36',
+                  description: 'Saúde',
+                  value: '431.53',
+                },
+                {
+                  percentage: '15',
+                  description: 'Transporte',
+                  value: '194.47',
+                },
+                {
+                  percentage: '5',
+                  description: 'Lazer',
+                  value: '74.90',
+                },
+              ].map((item, index) => (
+                <View style={styles.analitcsCard} key={index}>
+                  <View style={{width: 44, height:44, borderColor: '#fff', borderWidth: 1, borderRadius: 22, alignItems: 'center', justifyContent: 'center'}}>
+                    <Text style={styles.analitcsCardTitle}>{item.percentage}%</Text>
+                  </View>
+                  <Text style={styles.analitcsCardDescription}>{item.description}</Text>
+                  <Text style={styles.analitcsCardDescription}>R$ {item.value}</Text>
+                </View>
+              ))
+            }
+          </ScrollView>
         </View>
       </View>
+      <BottomSheet
+        snapPoints={snapPoints}
+        backgroundStyle={{backgroundColor: '#2E2E2E'}}
+        handleIndicatorStyle={{backgroundColor: '#fff', width: '25%'}}
+      >
+        <BottomSheetView style={styles.bottomSheet}>
+          <Text style={styles.bottomSheetTitle}>Transactions</Text>
+        </BottomSheetView>
+      </BottomSheet>
     </View>
   );
 }
@@ -92,7 +136,6 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   mainContentContainer: {
-    padding: 16,
     gap: 16,
   },
   mainContentsmall: {
@@ -128,15 +171,19 @@ const styles = StyleSheet.create({
   },
   analitcsContainer: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'flex-start',
+    paddingLeft: 16,
     gap: 16,
   },
   analitcsTitle: {
     fontSize: 16,
     fontWeight: 'bold',
   },
-  analitcsCardContainer: {},
+  analitcsCardContainer: {
+    columnGap: 16,
+    rowGap: 16,
+  },
   analitcsCardDescription: {
     color: '#fff',
   },
@@ -151,4 +198,13 @@ const styles = StyleSheet.create({
   analitcsCardTitle: {
     color: '#fff',
   },
+  bottomSheet: {
+    padding: 16,
+    color: 'white',
+  },
+  bottomSheetTitle: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  }
 });
