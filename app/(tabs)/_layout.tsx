@@ -1,37 +1,84 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import React from 'react'
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useColorScheme } from '@/hooks/useColorScheme'
+import HomeScreen from './index'
+
+import { createBottomTabNavigator, } from '@react-navigation/bottom-tabs'
+import { Image, View, Dimensions } from 'react-native'
+
+const Tab = createBottomTabNavigator();
+const { width: screenWidth } = Dimensions.get('window');
+console.log(screenWidth)
+console.log(screenWidth * 0.5)
+console.log((screenWidth - (screenWidth * 0.5)) / 2)
+
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <Tabs
+    <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-    </Tabs>
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          position: 'absolute',
+          left: (screenWidth - 32 - (screenWidth * 0.5)) / 2,
+          width: (screenWidth * 0.5),
+          margin: 16,
+          borderRadius: 32,
+          borderColor: '#2e2e2e',
+          borderWidth: 1,
+          backgroundColor: 'white',
+          // How to don't use this?
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          height: 64,
+        },
+      }}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} options={{
+        tabBarIcon: ({ focused, color, size}) => (
+          <View>
+            <Image
+              source={require('@/assets/images/home-icon.png')}
+              style={{ width: size, height: size, tintColor: focused ? color : '#000' }}
+            />
+          </View>
+        )
+      }}/>
+      <Tab.Screen name="Investiments" component={HomeScreen} options={{
+        tabBarIcon: ({ focused, color, size}) => (
+          <View>
+            <Image
+              source={require('@/assets/images/credit-card-icon.png')}
+              style={{ width: size, height: size, tintColor: focused ? color : '#000' }}
+            />
+          </View>
+        )
+      }}/>
+      <Tab.Screen name="Bank accounts" component={HomeScreen} options={{
+        tabBarIcon: ({ focused, color, size}) => (
+          <View>
+            <Image
+              source={require('@/assets/images/investiments-icon.png')}
+              style={{ width: size, height: size, tintColor: focused ? color : '#000' }}
+            />
+          </View>
+        )
+      }}/>
+      <Tab.Screen name="Insights" component={HomeScreen} options={{
+        tabBarIcon: ({ focused, color, size}) => (
+          <View>
+            <Image
+              source={require('@/assets/images/chart-icon.png')}
+              style={{ width: size, height: size, tintColor: focused ? color : '#000' }}
+            />
+          </View>
+        )
+      }}/>
+    </Tab.Navigator>
   );
 }

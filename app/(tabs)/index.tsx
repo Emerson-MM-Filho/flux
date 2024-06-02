@@ -6,7 +6,7 @@ import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 export default function HomeScreen() {
 
-  const snapPoints = useMemo(() => ['30%', '82%'], []);
+  const snapPoints = useMemo(() => ['45%', '82%'], []);
 
   return (
     <View style={styles.appContainer}>
@@ -81,6 +81,109 @@ export default function HomeScreen() {
       >
         <BottomSheetView style={styles.bottomSheet}>
           <Text style={styles.bottomSheetTitle}>Transactions</Text>
+          <ScrollView
+            contentContainerStyle={styles.transactionList}
+            stickyHeaderIndices={[0]}
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.transactionCard}>
+              <View style={styles.transactionCardLeftContent}>
+                <View style={{...styles.transactionCardIconContainer, backgroundColor: 'none'}}>
+                  <Image source={require('@/assets/images/add-icon.png')}/>
+                </View>
+                <View style={{...styles.transactionCardContentContainer, justifyContent: 'center'}}>
+                  <Text style={styles.transactionCardTitle}>Add new</Text>
+                </View>
+              </View>
+            </View>
+            {
+              [
+                {
+                  id: 1,
+                  title: 'Fort Atacadista',
+                  date: '12/03/2024',
+                  value: '- R$ 15,68',
+                  tags: [
+                    {id: 1, name: 'Páscoa', mainColor: '#F54545', backgroundColor: 'rgba(245, 69, 69, 0.5)'},
+                    {id: 2, name: 'Compras', mainColor: '#45CBF5', backgroundColor: 'rgba(69, 203, 245, 0.5)'},
+                    {id: 3, name: 'Compras', mainColor: '#DDF545', backgroundColor: 'rgba(221, 245, 69, 0.5)'},
+                  ],
+                },
+                {
+                  id: 1,
+                  title: 'Fort Atacadista',
+                  date: '12/03/2024',
+                  value: '- R$ 15,68',
+                  tags: [
+                    {id: 1, name: 'Páscoa', mainColor: '#F54545', backgroundColor: 'rgba(245, 69, 69, 0.5)'},
+                    {id: 2, name: 'Compras', mainColor: '#45CBF5', backgroundColor: 'rgba(69, 203, 245, 0.5)'},
+                    {id: 3, name: 'Compras', mainColor: '#DDF545', backgroundColor: 'rgba(221, 245, 69, 0.5)'},
+                  ],
+                },
+                {
+                  id: 1,
+                  title: 'Fort Atacadista',
+                  date: '12/03/2024',
+                  value: '- R$ 15,68',
+                  tags: [
+                    {id: 1, name: 'Páscoa', mainColor: '#F54545', backgroundColor: 'rgba(245, 69, 69, 0.5)'},
+                    {id: 2, name: 'Compras', mainColor: '#45CBF5', backgroundColor: 'rgba(69, 203, 245, 0.5)'},
+                    {id: 3, name: 'Compras', mainColor: '#DDF545', backgroundColor: 'rgba(221, 245, 69, 0.5)'},
+                  ],
+                },
+                {
+                  id: 1,
+                  title: 'Fort Atacadista',
+                  date: '12/03/2024',
+                  value: '- R$ 15,68',
+                  tags: [
+                    {id: 1, name: 'Páscoa', mainColor: '#F54545', backgroundColor: 'rgba(245, 69, 69, 0.5)'},
+                    {id: 2, name: 'Compras', mainColor: '#45CBF5', backgroundColor: 'rgba(69, 203, 245, 0.5)'},
+                    {id: 3, name: 'Compras', mainColor: '#DDF545', backgroundColor: 'rgba(221, 245, 69, 0.5)'},
+                  ],
+                },
+                {
+                  id: 1,
+                  title: 'Fort Atacadista',
+                  date: '12/03/2024',
+                  value: '- R$ 15,68',
+                  tags: [
+                    {id: 1, name: 'Páscoa', mainColor: '#F54545', backgroundColor: 'rgba(245, 69, 69, 0.5)'},
+                    {id: 2, name: 'Compras', mainColor: '#45CBF5', backgroundColor: 'rgba(69, 203, 245, 0.5)'},
+                    {id: 3, name: 'Compras', mainColor: '#DDF545', backgroundColor: 'rgba(221, 245, 69, 0.5)'},
+                  ],
+                },
+              ].map(({id, title, date, value, tags}) => (
+                <View style={styles.transactionCard} key={id}>
+                  <View style={styles.transactionCardLeftContent}>
+                    <View style={styles.transactionCardIconContainer}>
+                      <Image source={require('@/assets/images/cart-icon.png')}/>
+                    </View>
+                    <View style={styles.transactionCardContentContainer}>
+                      <Text style={styles.transactionCardTitle}>{title}</Text>
+                      <Text style={styles.transactionCardTitle}>{date}</Text>
+                    </View>
+                  </View>
+                  <View style={styles.transactionCardRightContent}>
+                    <Text style={styles.transactionCardTitle}>{value}</Text>
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                      {
+                        tags?.map(({id, name, mainColor, backgroundColor}) => (
+                          <View
+                            style={{...styles.tag, backgroundColor: backgroundColor, borderColor: mainColor}}
+                            key={id}
+                          >
+                            <Text style={{color: mainColor}}>#</Text>
+                            <Text style={styles.tagName}>{name}</Text>
+                          </View>
+                        ))
+                      }
+                    </ScrollView>
+                  </View>
+                </View>
+              ))
+            }
+          </ScrollView>
         </BottomSheetView>
       </BottomSheet>
     </View>
@@ -201,10 +304,63 @@ const styles = StyleSheet.create({
   bottomSheet: {
     padding: 16,
     color: 'white',
+    rowGap: 20,
   },
   bottomSheetTitle: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
-  }
+  },
+  transactionList: {
+    rowGap: 16,
+  },
+  transactionCardIconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: 8,
+    backgroundColor: 'rgba(190, 190, 190, 0.5)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  transactionCard: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 8,
+    borderRadius: 16,
+    backgroundColor: '#2A2A2A',
+  },
+  transactionCardTitle: {
+    color: 'white',
+  },
+  transactionCardLeftContent: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 16,
+  },
+  transactionCardRightContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    width: '50%',
+  },
+  transactionCardContentContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  tag: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 8,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 16,
+    borderWidth: 1,
+  },
+  tagName: {
+    color: 'white',
+  },
 });
