@@ -1,90 +1,101 @@
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
-import React, { useMemo } from 'react'
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
-import TransactionCard from '../../components/TransactionCard'
-
-
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
+import React, { useMemo } from "react"
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native"
+import AnalyticCard from "../../components/AnalyticsCard"
+import TransactionCard from "../../components/TransactionCard"
 
 export default function HomeScreen() {
-
-  const snapPoints = useMemo(() => ['45%', '82%'], []);
+  const snapPoints = useMemo(() => ["45%", "82%"], []);
 
   return (
     <View style={styles.appContainer}>
       <View style={styles.headerContainer}>
         <View style={styles.headerLeftContainer}>
-          <Image source={require('@/assets/images/logo.png')} style={styles.reactLogo} />
+          <Image
+            source={require("@/assets/images/logo.png")}
+            style={styles.reactLogo}
+          />
           <Text style={styles.logoTitle}> Flux </Text>
         </View>
         <View style={styles.headerRigthContainer}>
-          <Image source={require('@/assets/images/alert-icon.png')} style={styles.alertIcon} />
-          <Image source={require('@/assets/images/profile-pic.png')} style={styles.profilePic} />
+          <Image
+            source={require("@/assets/images/alert-icon.png")}
+            style={styles.alertIcon}
+          />
+          <Image
+            source={require("@/assets/images/profile-pic.png")}
+            style={styles.profilePic}
+          />
         </View>
       </View>
       <View style={styles.mainContentContainer}>
         <View style={styles.periodContainer}>
           <Text style={styles.mainContentsmall}>Este mês</Text>
-          <Image source={require('@/assets/images/chevron-down.png')} style={styles.reactLogo} />
+          <Image
+            source={require("@/assets/images/chevron-down.png")}
+            style={styles.reactLogo}
+          />
         </View>
         <View style={styles.currentBalanceContainer}>
           <Text style={styles.mainContentLarge}>R$ 1.324,90</Text>
         </View>
         <View style={styles.incomeExpensesContainer}>
-          <Text style={{...styles.mainContentMedium, color: '#0FB50C'}}>+ $ 6.234,28</Text>
-          <Text style={{...styles.mainContentMedium, color: '#B50C0C'}}>- $ 4.913,93</Text>
+          <Text style={{ ...styles.mainContentMedium, color: "#0FB50C" }}>
+            + $ 6.234,28
+          </Text>
+          <Text style={{ ...styles.mainContentMedium, color: "#B50C0C" }}>
+            - $ 4.913,93
+          </Text>
         </View>
         <View style={styles.analitcsContainer}>
-          <Text style={styles.analitcsTitle}>Analitcs</Text>
+          <Text style={{ fontSize: 16, fontWeight: "bold" }}>Analitcs</Text>
           <ScrollView
             horizontal={true}
             contentContainerStyle={styles.analitcsCardContainer}
             showsHorizontalScrollIndicator={false}
           >
-            {
-              [
-                {
-                  percentage: '49',
-                  description: 'Mercado',
-                  value: '628.90',
-                },
-                {
-                  percentage: '36',
-                  description: 'Saúde',
-                  value: '431.53',
-                },
-                {
-                  percentage: '15',
-                  description: 'Transporte',
-                  value: '194.47',
-                },
-                {
-                  percentage: '5',
-                  description: 'Lazer',
-                  value: '74.90',
-                },
-              ].map((item, index) => (
-                <View style={styles.analitcsCard} key={index}>
-                  <View style={{width: 44, height:44, borderColor: '#fff', borderWidth: 1, borderRadius: 22, alignItems: 'center', justifyContent: 'center'}}>
-                    <Text style={styles.analitcsCardTitle}>{item.percentage}%</Text>
-                  </View>
-                  <Text style={styles.analitcsCardDescription}>{item.description}</Text>
-                  <Text style={styles.analitcsCardDescription}>R$ {item.value}</Text>
-                </View>
-              ))
-            }
+            {[
+              {
+                percentage: 49,
+                description: "Mercado",
+                value: 628.9,
+              },
+              {
+                percentage: 36,
+                description: "Saúde",
+                value: 431.53,
+              },
+              {
+                percentage: 15,
+                description: "Transporte",
+                value: 194.47,
+              },
+              {
+                percentage: 5,
+                description: "Lazer",
+                value: 74.9,
+              },
+            ].map((item, index) => (
+              <AnalyticCard
+                percentage={item.percentage}
+                description={item.description}
+                value={item.value}
+                key={index}
+              />
+            ))}
           </ScrollView>
         </View>
       </View>
       <BottomSheet
         snapPoints={snapPoints}
-        backgroundStyle={{backgroundColor: '#2E2E2E'}}
-        handleIndicatorStyle={{backgroundColor: '#fff', width: '25%'}}
+        backgroundStyle={{ backgroundColor: "#2E2E2E" }}
+        handleIndicatorStyle={{ backgroundColor: "#fff", width: "25%" }}
       >
         <BottomSheetView style={styles.bottomSheet}>
           <Text style={styles.bottomSheetTitle}>Transactions</Text>
           <View style={styles.addTransactionBtn}>
             <View style={styles.addTransactionBtnIconContainer}>
-              <Image source={require('@/assets/images/add-icon.png')} />
+              <Image source={require("@/assets/images/add-icon.png")} />
             </View>
             <Text style={styles.addTransactionBtnText}>Add new</Text>
           </View>
@@ -93,166 +104,180 @@ export default function HomeScreen() {
             showsVerticalScrollIndicator={false}
           >
             {[
-                {
-                  id: 1,
-                  title: 'Fort Atacadista 1',
-                  date: '12/03/2024',
-                  value: '- R$ 15,68',
-                  category: {
-                    id: '1',
-                    name: 'Compras',
-                    icon: require('@/assets/images/cart-icon.png'),
-                  },
-                  tags: [
-                    {id: 1, name: 'Páscoa', mainColor: '#F54545', backgroundColor: 'rgba(245, 69, 69, 0.5)'},
-                    {id: 2, name: 'Compras', mainColor: '#45CBF5', backgroundColor: 'rgba(69, 203, 245, 0.5)'},
-                    {id: 3, name: 'Compras', mainColor: '#DDF545', backgroundColor: 'rgba(221, 245, 69, 0.5)'},
-                  ],
+              {
+                id: 1,
+                title: "Fort Atacadista 1",
+                date: "12/03/2024",
+                value: "- R$ 15,68",
+                category: {
+                  id: "1",
+                  name: "Compras",
+                  icon: require("@/assets/images/cart-icon.png"),
                 },
-                {
-                  id: 2,
-                  title: 'Fort Atacadista 2',
-                  date: '12/03/2024',
-                  category: {
-                    id: '1',
-                    name: 'Compras',
-                    icon: require('@/assets/images/cart-icon.png')
+                tags: [
+                  {
+                    id: 1,
+                    name: "Páscoa",
+                    mainColor: "#F54545",
+                    backgroundColor: "rgba(245, 69, 69, 0.5)",
                   },
-                  value: '- R$ 15,68',
-                  tags: [],
-                },
-                {
-                  id: 3,
-                  title: 'Fort Atacadista 3',
-                  date: '12/03/2024',
-                  category: {
-                    id: '1',
-                    name: 'Compras',
-                    icon: require('@/assets/images/cart-icon.png')
+                  {
+                    id: 2,
+                    name: "Compras",
+                    mainColor: "#45CBF5",
+                    backgroundColor: "rgba(69, 203, 245, 0.5)",
                   },
-                  value: '- R$ 15,68',
-                  tags: [],
-                },
-                {
-                  id: 4,
-                  title: 'Fort Atacadista 4',
-                  date: '12/03/2024',
-                  category: {
-                    id: '1',
-                    name: 'Compras',
-                    icon: require('@/assets/images/cart-icon.png')
+                  {
+                    id: 3,
+                    name: "Compras",
+                    mainColor: "#DDF545",
+                    backgroundColor: "rgba(221, 245, 69, 0.5)",
                   },
-                  value: '- R$ 15,68',
-                  tags: [],
+                ],
+              },
+              {
+                id: 2,
+                title: "Fort Atacadista 2",
+                date: "12/03/2024",
+                category: {
+                  id: "1",
+                  name: "Compras",
+                  icon: require("@/assets/images/cart-icon.png"),
                 },
-                {
-                  id: 5,
-                  title: 'Fort Atacadista 5',
-                  date: '12/03/2024',
-                  category: {
-                    id: '1',
-                    name: 'Compras',
-                    icon: require('@/assets/images/cart-icon.png')
-                  },
-                  value: '- R$ 15,68',
-                  tags: [],
+                value: "- R$ 15,68",
+                tags: [],
+              },
+              {
+                id: 3,
+                title: "Fort Atacadista 3",
+                date: "12/03/2024",
+                category: {
+                  id: "1",
+                  name: "Compras",
+                  icon: require("@/assets/images/cart-icon.png"),
                 },
-                {
-                  id: 6,
-                  title: 'Fort Atacadista 6',
-                  date: '12/03/2024',
-                  category: {
-                    id: '1',
-                    name: 'Compras',
-                    icon: require('@/assets/images/cart-icon.png')
-                  },
-                  value: '- R$ 15,68',
-                  tags: [],
+                value: "- R$ 15,68",
+                tags: [],
+              },
+              {
+                id: 4,
+                title: "Fort Atacadista 4",
+                date: "12/03/2024",
+                category: {
+                  id: "1",
+                  name: "Compras",
+                  icon: require("@/assets/images/cart-icon.png"),
                 },
-                {
-                  id: 7,
-                  title: 'Fort Atacadista 7',
-                  date: '12/03/2024',
-                  category: {
-                    id: '1',
-                    name: 'Compras',
-                    icon: require('@/assets/images/cart-icon.png')
-                  },
-                  value: '- R$ 15,68',
-                  tags: [],
+                value: "- R$ 15,68",
+                tags: [],
+              },
+              {
+                id: 5,
+                title: "Fort Atacadista 5",
+                date: "12/03/2024",
+                category: {
+                  id: "1",
+                  name: "Compras",
+                  icon: require("@/assets/images/cart-icon.png"),
                 },
-                {
-                  id: 8,
-                  title: 'Fort Atacadista 8',
-                  date: '12/03/2024',
-                  category: {
-                    id: '1',
-                    name: 'Compras',
-                    icon: require('@/assets/images/cart-icon.png')
-                  },
-                  value: '- R$ 15,68',
-                  tags: [],
+                value: "- R$ 15,68",
+                tags: [],
+              },
+              {
+                id: 6,
+                title: "Fort Atacadista 6",
+                date: "12/03/2024",
+                category: {
+                  id: "1",
+                  name: "Compras",
+                  icon: require("@/assets/images/cart-icon.png"),
                 },
-                {
-                  id: 9,
-                  title: 'Fort Atacadista 9',
-                  date: '12/03/2024',
-                  category: {
-                    id: '1',
-                    name: 'Compras',
-                    icon: require('@/assets/images/cart-icon.png')
-                  },
-                  value: '- R$ 15,68',
-                  tags: [],
+                value: "- R$ 15,68",
+                tags: [],
+              },
+              {
+                id: 7,
+                title: "Fort Atacadista 7",
+                date: "12/03/2024",
+                category: {
+                  id: "1",
+                  name: "Compras",
+                  icon: require("@/assets/images/cart-icon.png"),
                 },
-                {
-                  id: 10,
-                  title: 'Fort Atacadista 10',
-                  date: '12/03/2024',
-                  category: {
-                    id: '1',
-                    name: 'Compras',
-                    icon: require('@/assets/images/cart-icon.png')
-                  },
-                  value: '- R$ 15,68',
-                  tags: [],
+                value: "- R$ 15,68",
+                tags: [],
+              },
+              {
+                id: 8,
+                title: "Fort Atacadista 8",
+                date: "12/03/2024",
+                category: {
+                  id: "1",
+                  name: "Compras",
+                  icon: require("@/assets/images/cart-icon.png"),
                 },
-                {
-                  id: 11,
-                  title: 'Fort Atacadista 11',
-                  date: '12/03/2024',
-                  category: {
-                    id: '1',
-                    name: 'Compras',
-                    icon: require('@/assets/images/cart-icon.png')
-                  },
-                  value: '- R$ 15,68',
-                  tags: [],
+                value: "- R$ 15,68",
+                tags: [],
+              },
+              {
+                id: 9,
+                title: "Fort Atacadista 9",
+                date: "12/03/2024",
+                category: {
+                  id: "1",
+                  name: "Compras",
+                  icon: require("@/assets/images/cart-icon.png"),
                 },
-                {
-                  id: 12,
-                  title: 'Fort Atacadista 12',
-                  date: '12/03/2024',
-                  category: {
-                    id: '1',
-                    name: 'Compras',
-                    icon: require('@/assets/images/cart-icon.png')
-                  },
-                  value: '- R$ 15,68',
-                  tags: [],
+                value: "- R$ 15,68",
+                tags: [],
+              },
+              {
+                id: 10,
+                title: "Fort Atacadista 10",
+                date: "12/03/2024",
+                category: {
+                  id: "1",
+                  name: "Compras",
+                  icon: require("@/assets/images/cart-icon.png"),
                 },
-              ].map(({id, title, date, category, value, tags}) => (
-                <TransactionCard
-                  id={id}
-                  title={title}
-                  date={date}
-                  category={category}
-                  value={value}
-                  tags={tags}
-                  key={id}
-                />
-              ))
-            }
+                value: "- R$ 15,68",
+                tags: [],
+              },
+              {
+                id: 11,
+                title: "Fort Atacadista 11",
+                date: "12/03/2024",
+                category: {
+                  id: "1",
+                  name: "Compras",
+                  icon: require("@/assets/images/cart-icon.png"),
+                },
+                value: "- R$ 15,68",
+                tags: [],
+              },
+              {
+                id: 12,
+                title: "Fort Atacadista 12",
+                date: "12/03/2024",
+                category: {
+                  id: "1",
+                  name: "Compras",
+                  icon: require("@/assets/images/cart-icon.png"),
+                },
+                value: "- R$ 15,68",
+                tags: [],
+              },
+            ].map(({ id, title, date, category, value, tags }) => (
+              <TransactionCard
+                id={id}
+                title={title}
+                date={date}
+                category={category}
+                value={value}
+                tags={tags}
+                key={id}
+              />
+            ))}
           </ScrollView>
         </BottomSheetView>
       </BottomSheet>
@@ -262,12 +287,12 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   appContainer: {
-    backgroundColor: 'white',
-    height: '100%',
+    backgroundColor: "white",
+    height: "100%",
   },
   titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 80,
     gap: 8,
   },
@@ -280,8 +305,8 @@ const styles = StyleSheet.create({
   },
   logoTitle: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#000',
+    fontWeight: "bold",
+    color: "#000",
   },
   alertIcon: {
     height: 24,
@@ -290,22 +315,22 @@ const styles = StyleSheet.create({
     height: 48,
   },
   headerContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     padding: 16,
     marginTop: 32,
   },
   headerLeftContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center'
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   },
   headerRigthContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
     gap: 16,
   },
   mainContentContainer: {
@@ -313,82 +338,64 @@ const styles = StyleSheet.create({
   },
   mainContentsmall: {
     fontSize: 16,
-    fontWeight: 'light',
+    fontWeight: "light",
   },
   periodContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   currentBalanceContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   mainContentLarge: {
     fontSize: 40,
-    fontWeight: 'semibold',
+    fontWeight: "semibold",
   },
   incomeExpensesContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     gap: 16,
   },
   mainContentMedium: {
     fontSize: 20,
-    fontWeight: 'regular',
+    fontWeight: "regular",
   },
   analitcsContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
     paddingLeft: 16,
     gap: 16,
-  },
-  analitcsTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
   },
   analitcsCardContainer: {
     columnGap: 16,
     rowGap: 16,
   },
-  analitcsCardDescription: {
-    color: '#fff',
-  },
-  analitcsCard: {
-    backgroundColor: '#262626',
-    padding: 16,
-    borderRadius: 8,
-    gap: 8,
-    display: 'flex',
-    alignItems: 'center',
-  },
-  analitcsCardTitle: {
-    color: '#fff',
-  },
   bottomSheet: {
     padding: 16,
-    color: 'white',
+    color: "white",
     rowGap: 20,
   },
   bottomSheetTitle: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   transactionList: {
     rowGap: 16,
-    paddingBottom: 68
+    paddingBottom: 68,
   },
   addTransactionBtn: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
     padding: 8,
     borderRadius: 16,
     backgroundColor: "#2A2A2A",
@@ -403,7 +410,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   addTransactionBtnText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
   },
 });
