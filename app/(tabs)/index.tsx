@@ -1,6 +1,7 @@
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
 import React, { useMemo } from 'react'
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import TransactionCard from '../../components/TransactionCard'
 
 
 
@@ -81,28 +82,27 @@ export default function HomeScreen() {
       >
         <BottomSheetView style={styles.bottomSheet}>
           <Text style={styles.bottomSheetTitle}>Transactions</Text>
+          <View style={styles.addTransactionBtn}>
+            <View style={styles.addTransactionBtnIconContainer}>
+              <Image source={require('@/assets/images/add-icon.png')} />
+            </View>
+            <Text style={styles.addTransactionBtnText}>Add new</Text>
+          </View>
           <ScrollView
             contentContainerStyle={styles.transactionList}
-            stickyHeaderIndices={[0]}
             showsVerticalScrollIndicator={false}
           >
-            <View style={styles.transactionCard}>
-              <View style={styles.transactionCardLeftContent}>
-                <View style={{...styles.transactionCardIconContainer, backgroundColor: 'none'}}>
-                  <Image source={require('@/assets/images/add-icon.png')}/>
-                </View>
-                <View style={{...styles.transactionCardContentContainer, justifyContent: 'center'}}>
-                  <Text style={styles.transactionCardTitle}>Add new</Text>
-                </View>
-              </View>
-            </View>
-            {
-              [
+            {[
                 {
                   id: 1,
-                  title: 'Fort Atacadista',
+                  title: 'Fort Atacadista 1',
                   date: '12/03/2024',
                   value: '- R$ 15,68',
+                  category: {
+                    id: '1',
+                    name: 'Compras',
+                    icon: require('@/assets/images/cart-icon.png'),
+                  },
                   tags: [
                     {id: 1, name: 'Páscoa', mainColor: '#F54545', backgroundColor: 'rgba(245, 69, 69, 0.5)'},
                     {id: 2, name: 'Compras', mainColor: '#45CBF5', backgroundColor: 'rgba(69, 203, 245, 0.5)'},
@@ -110,77 +110,147 @@ export default function HomeScreen() {
                   ],
                 },
                 {
-                  id: 1,
-                  title: 'Fort Atacadista',
+                  id: 2,
+                  title: 'Fort Atacadista 2',
                   date: '12/03/2024',
+                  category: {
+                    id: '1',
+                    name: 'Compras',
+                    icon: require('@/assets/images/cart-icon.png')
+                  },
                   value: '- R$ 15,68',
-                  tags: [
-                    {id: 1, name: 'Páscoa', mainColor: '#F54545', backgroundColor: 'rgba(245, 69, 69, 0.5)'},
-                    {id: 2, name: 'Compras', mainColor: '#45CBF5', backgroundColor: 'rgba(69, 203, 245, 0.5)'},
-                    {id: 3, name: 'Compras', mainColor: '#DDF545', backgroundColor: 'rgba(221, 245, 69, 0.5)'},
-                  ],
+                  tags: [],
                 },
                 {
-                  id: 1,
-                  title: 'Fort Atacadista',
+                  id: 3,
+                  title: 'Fort Atacadista 3',
                   date: '12/03/2024',
+                  category: {
+                    id: '1',
+                    name: 'Compras',
+                    icon: require('@/assets/images/cart-icon.png')
+                  },
                   value: '- R$ 15,68',
-                  tags: [
-                    {id: 1, name: 'Páscoa', mainColor: '#F54545', backgroundColor: 'rgba(245, 69, 69, 0.5)'},
-                    {id: 2, name: 'Compras', mainColor: '#45CBF5', backgroundColor: 'rgba(69, 203, 245, 0.5)'},
-                    {id: 3, name: 'Compras', mainColor: '#DDF545', backgroundColor: 'rgba(221, 245, 69, 0.5)'},
-                  ],
+                  tags: [],
                 },
                 {
-                  id: 1,
-                  title: 'Fort Atacadista',
+                  id: 4,
+                  title: 'Fort Atacadista 4',
                   date: '12/03/2024',
+                  category: {
+                    id: '1',
+                    name: 'Compras',
+                    icon: require('@/assets/images/cart-icon.png')
+                  },
                   value: '- R$ 15,68',
-                  tags: [
-                    {id: 1, name: 'Páscoa', mainColor: '#F54545', backgroundColor: 'rgba(245, 69, 69, 0.5)'},
-                    {id: 2, name: 'Compras', mainColor: '#45CBF5', backgroundColor: 'rgba(69, 203, 245, 0.5)'},
-                    {id: 3, name: 'Compras', mainColor: '#DDF545', backgroundColor: 'rgba(221, 245, 69, 0.5)'},
-                  ],
+                  tags: [],
                 },
                 {
-                  id: 1,
-                  title: 'Fort Atacadista',
+                  id: 5,
+                  title: 'Fort Atacadista 5',
                   date: '12/03/2024',
+                  category: {
+                    id: '1',
+                    name: 'Compras',
+                    icon: require('@/assets/images/cart-icon.png')
+                  },
                   value: '- R$ 15,68',
-                  tags: [
-                    {id: 1, name: 'Páscoa', mainColor: '#F54545', backgroundColor: 'rgba(245, 69, 69, 0.5)'},
-                    {id: 2, name: 'Compras', mainColor: '#45CBF5', backgroundColor: 'rgba(69, 203, 245, 0.5)'},
-                    {id: 3, name: 'Compras', mainColor: '#DDF545', backgroundColor: 'rgba(221, 245, 69, 0.5)'},
-                  ],
+                  tags: [],
                 },
-              ].map(({id, title, date, value, tags}) => (
-                <View style={styles.transactionCard} key={id}>
-                  <View style={styles.transactionCardLeftContent}>
-                    <View style={styles.transactionCardIconContainer}>
-                      <Image source={require('@/assets/images/cart-icon.png')}/>
-                    </View>
-                    <View style={styles.transactionCardContentContainer}>
-                      <Text style={styles.transactionCardTitle}>{title}</Text>
-                      <Text style={styles.transactionCardTitle}>{date}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.transactionCardRightContent}>
-                    <Text style={styles.transactionCardTitle}>{value}</Text>
-                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                      {
-                        tags?.map(({id, name, mainColor, backgroundColor}) => (
-                          <View
-                            style={{...styles.tag, backgroundColor: backgroundColor, borderColor: mainColor}}
-                            key={id}
-                          >
-                            <Text style={{color: mainColor}}>#</Text>
-                            <Text style={styles.tagName}>{name}</Text>
-                          </View>
-                        ))
-                      }
-                    </ScrollView>
-                  </View>
-                </View>
+                {
+                  id: 6,
+                  title: 'Fort Atacadista 6',
+                  date: '12/03/2024',
+                  category: {
+                    id: '1',
+                    name: 'Compras',
+                    icon: require('@/assets/images/cart-icon.png')
+                  },
+                  value: '- R$ 15,68',
+                  tags: [],
+                },
+                {
+                  id: 7,
+                  title: 'Fort Atacadista 7',
+                  date: '12/03/2024',
+                  category: {
+                    id: '1',
+                    name: 'Compras',
+                    icon: require('@/assets/images/cart-icon.png')
+                  },
+                  value: '- R$ 15,68',
+                  tags: [],
+                },
+                {
+                  id: 8,
+                  title: 'Fort Atacadista 8',
+                  date: '12/03/2024',
+                  category: {
+                    id: '1',
+                    name: 'Compras',
+                    icon: require('@/assets/images/cart-icon.png')
+                  },
+                  value: '- R$ 15,68',
+                  tags: [],
+                },
+                {
+                  id: 9,
+                  title: 'Fort Atacadista 9',
+                  date: '12/03/2024',
+                  category: {
+                    id: '1',
+                    name: 'Compras',
+                    icon: require('@/assets/images/cart-icon.png')
+                  },
+                  value: '- R$ 15,68',
+                  tags: [],
+                },
+                {
+                  id: 10,
+                  title: 'Fort Atacadista 10',
+                  date: '12/03/2024',
+                  category: {
+                    id: '1',
+                    name: 'Compras',
+                    icon: require('@/assets/images/cart-icon.png')
+                  },
+                  value: '- R$ 15,68',
+                  tags: [],
+                },
+                {
+                  id: 11,
+                  title: 'Fort Atacadista 11',
+                  date: '12/03/2024',
+                  category: {
+                    id: '1',
+                    name: 'Compras',
+                    icon: require('@/assets/images/cart-icon.png')
+                  },
+                  value: '- R$ 15,68',
+                  tags: [],
+                },
+                {
+                  id: 12,
+                  title: 'Fort Atacadista 12',
+                  date: '12/03/2024',
+                  category: {
+                    id: '1',
+                    name: 'Compras',
+                    icon: require('@/assets/images/cart-icon.png')
+                  },
+                  value: '- R$ 15,68',
+                  tags: [],
+                },
+              ].map(({id, title, date, category, value, tags}) => (
+                <TransactionCard
+                  id={id}
+                  title={title}
+                  date={date}
+                  category={category}
+                  value={value}
+                  tags={tags}
+                  key={id}
+                />
               ))
             }
           </ScrollView>
@@ -313,54 +383,27 @@ const styles = StyleSheet.create({
   },
   transactionList: {
     rowGap: 16,
+    paddingBottom: 68
   },
-  transactionCardIconContainer: {
-    width: 44,
-    height: 44,
-    borderRadius: 8,
-    backgroundColor: 'rgba(190, 190, 190, 0.5)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  transactionCard: {
+  addTransactionBtn: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 8,
     borderRadius: 16,
-    backgroundColor: '#2A2A2A',
-  },
-  transactionCardTitle: {
-    color: 'white',
-  },
-  transactionCardLeftContent: {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 16,
-  },
-  transactionCardRightContent: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    width: '50%',
-  },
-  transactionCardContentContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-  tag: {
-    display: 'flex',
-    flexDirection: 'row',
+    backgroundColor: "#2A2A2A",
     gap: 8,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: 16,
-    borderWidth: 1,
   },
-  tagName: {
+  addTransactionBtnIconContainer: {
+    width: 52,
+    height: 52,
+    borderRadius: 8,
+    backgroundColor: "rgba(190, 190, 190, 0.5)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  addTransactionBtnText: {
     color: 'white',
+    fontSize: 16,
   },
 });
