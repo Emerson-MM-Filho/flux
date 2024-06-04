@@ -1,40 +1,21 @@
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
 import React, { useMemo } from "react"
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 import AnalyticCard from "../../components/AnalyticsCard"
+import Header from "../../components/Header"
 import TransactionCard from "../../components/TransactionCard"
 
 export default function HomeScreen() {
   const snapPoints = useMemo(() => ["45%", "82%"], []);
 
   return (
-    <View style={styles.appContainer}>
-      <View style={styles.headerContainer}>
-        <View style={styles.headerLeftContainer}>
-          <Image
-            source={require("@/assets/images/logo.png")}
-            style={styles.reactLogo}
-          />
-          <Text style={styles.logoTitle}> Flux </Text>
-        </View>
-        <View style={styles.headerRigthContainer}>
-          <Image
-            source={require("@/assets/images/alert-icon.png")}
-            style={styles.alertIcon}
-          />
-          <Image
-            source={require("@/assets/images/profile-pic.png")}
-            style={styles.profilePic}
-          />
-        </View>
-      </View>
-      <View style={styles.mainContentContainer}>
+    <SafeAreaView style={styles.tabContainer}>
+      <Header />
+      <View>
         <View style={styles.periodContainer}>
-          <Text style={styles.mainContentsmall}>Este mês</Text>
-          <Image
-            source={require("@/assets/images/chevron-down.png")}
-            style={styles.reactLogo}
-          />
+          <Text style={styles.periodText}>Este mês</Text>
+          <Image source={require("@/assets/images/chevron-down.png")} />
         </View>
         <View style={styles.currentBalanceContainer}>
           <Text style={styles.mainContentLarge}>R$ 1.324,90</Text>
@@ -47,44 +28,44 @@ export default function HomeScreen() {
             - $ 4.913,93
           </Text>
         </View>
-        <View style={styles.analitcsContainer}>
-          <Text style={{ fontSize: 16, fontWeight: "bold" }}>Analitcs</Text>
-          <ScrollView
-            horizontal={true}
-            contentContainerStyle={styles.analitcsCardContainer}
-            showsHorizontalScrollIndicator={false}
-          >
-            {[
-              {
-                percentage: 49,
-                description: "Mercado",
-                value: 628.9,
-              },
-              {
-                percentage: 36,
-                description: "Saúde",
-                value: 431.53,
-              },
-              {
-                percentage: 15,
-                description: "Transporte",
-                value: 194.47,
-              },
-              {
-                percentage: 5,
-                description: "Lazer",
-                value: 74.9,
-              },
-            ].map((item, index) => (
-              <AnalyticCard
-                percentage={item.percentage}
-                description={item.description}
-                value={item.value}
-                key={index}
-              />
-            ))}
-          </ScrollView>
-        </View>
+      </View>
+      <View style={styles.analitcsContainer}>
+        <Text style={{ fontSize: 16, fontWeight: "bold" }}>Analitcs</Text>
+        <ScrollView
+          horizontal={true}
+          contentContainerStyle={styles.analitcsCardContainer}
+          showsHorizontalScrollIndicator={false}
+        >
+          {[
+            {
+              percentage: 49,
+              description: "Mercado",
+              value: 628.9,
+            },
+            {
+              percentage: 36,
+              description: "Saúde",
+              value: 431.53,
+            },
+            {
+              percentage: 15,
+              description: "Transporte",
+              value: 194.47,
+            },
+            {
+              percentage: 5,
+              description: "Lazer",
+              value: 74.9,
+            },
+          ].map((item, index) => (
+            <AnalyticCard
+              percentage={item.percentage}
+              description={item.description}
+              value={item.value}
+              key={index}
+            />
+          ))}
+        </ScrollView>
       </View>
       <BottomSheet
         snapPoints={snapPoints}
@@ -281,62 +262,17 @@ export default function HomeScreen() {
           </ScrollView>
         </BottomSheetView>
       </BottomSheet>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  appContainer: {
+  tabContainer: {
     backgroundColor: "white",
+    gap: 16,
     height: "100%",
   },
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 80,
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 24,
-  },
-  logoTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#000",
-  },
-  alertIcon: {
-    height: 24,
-  },
-  profilePic: {
-    height: 48,
-  },
-  headerContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: 16,
-    marginTop: 32,
-  },
-  headerLeftContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  headerRigthContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 16,
-  },
-  mainContentContainer: {
-    gap: 16,
-  },
-  mainContentsmall: {
+  periodText: {
     fontSize: 16,
     fontWeight: "light",
   },
