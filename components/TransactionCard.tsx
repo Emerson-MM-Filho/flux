@@ -1,26 +1,5 @@
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native"
-
-interface Category {
-  id: string;
-  name: string;
-  icon: any;
-}
-
-interface Tag {
-  id: number;
-  name: string;
-  mainColor: string;
-  backgroundColor: string;
-}
-
-interface Transaction {
-  id: number;
-  title: string;
-  date: string;
-  value: string;
-  category: Category;
-  tags: Tag[];
-}
+import TransactionInterface from "../interfaces/transaction"
 
 const TransactionCard = ({
   id,
@@ -29,11 +8,11 @@ const TransactionCard = ({
   category,
   value,
   tags,
-}: Transaction) => {
+}: TransactionInterface) => {
   return (
     <View style={styles.cardContainer} key={id}>
       <View style={styles.iconContainer}>
-        <Image source={category.icon}/>
+        <Image source={category.icon} />
       </View>
       <View style={styles.cardContent}>
         <View style={styles.topContent}>
