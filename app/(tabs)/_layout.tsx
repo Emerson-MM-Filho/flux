@@ -8,10 +8,6 @@ import { Image, View, Dimensions } from 'react-native'
 
 const Tab = createBottomTabNavigator();
 const { width: screenWidth } = Dimensions.get('window');
-console.log(screenWidth)
-console.log(screenWidth * 0.5)
-console.log((screenWidth - (screenWidth * 0.5)) / 2)
-
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
