@@ -1,12 +1,9 @@
 import { ScrollView, StyleSheet } from "react-native"
-import TransactionInterface from "../interfaces/transaction"
+import { useTransactions } from "../hooks/useTransactions"
 import TransactionCard from "./TransactionCard"
 
-export const TransactionsList = ({
-  transactions,
-}: {
-  transactions: TransactionInterface[];
-}) => {
+const TransactionsList = () => {
+  const transactions = useTransactions();
   return (
     <ScrollView
       contentContainerStyle={styles.transactionList}
