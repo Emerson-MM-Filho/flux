@@ -1,5 +1,6 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native"
+import { ScrollView, StyleSheet, Text, View } from "react-native"
 import TransactionInterface from "../interfaces/transaction"
+import { Icon } from './Icon'
 
 const TransactionCard = ({
   id,
@@ -11,9 +12,7 @@ const TransactionCard = ({
 }: TransactionInterface) => {
   return (
     <View style={styles.cardContainer} key={id}>
-      <View style={styles.iconContainer}>
-        <Image source={category.icon} />
-      </View>
+      <Icon icon={category.icon}/>
       <View style={styles.cardContent}>
         <View style={styles.topContent}>
           <Text style={styles.title}>{title}</Text>
@@ -56,14 +55,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: "#2A2A2A",
     gap: 8,
-  },
-  iconContainer: {
-    width: 52,
-    height: 52,
-    borderRadius: 8,
-    backgroundColor: "rgba(190, 190, 190, 0.5)",
-    alignItems: "center",
-    justifyContent: "center",
   },
   cardContent: {
     display: "flex",
