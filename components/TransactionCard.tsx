@@ -1,6 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native"
 import TransactionInterface from "../interfaces/transaction"
 import { Icon } from './Icon'
+import { Tag } from './Tag'
 
 const TransactionCard = ({
   id,
@@ -26,17 +27,13 @@ const TransactionCard = ({
             contentContainerStyle={styles.transactionCardTagsContainer}
           >
             {tags?.map(({ id, name, mainColor, backgroundColor }) => (
-              <View
-                style={{
-                  ...styles.tagContainer,
-                  backgroundColor: backgroundColor,
-                  borderColor: mainColor,
-                }}
+              <Tag
                 key={id}
-              >
-                <Text style={{ ...styles.tagText, color: mainColor }}>#</Text>
-                <Text style={styles.tagText}>{name}</Text>
-              </View>
+                id={id}
+                name={name}
+                mainColor={mainColor}
+                backgroundColor={backgroundColor}
+              />
             ))}
           </ScrollView>
         </View>
@@ -89,20 +86,5 @@ const styles = StyleSheet.create({
   transactionCardTagsContainer: {
     columnGap: 4,
     alignSelf: "flex-end",
-  },
-  tagContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-    paddingVertical: 2,
-    paddingHorizontal: 8,
-    borderRadius: 16,
-    borderWidth: 1,
-    maxHeight: 24,
-  },
-  tagText: {
-    color: "white",
-    fontSize: 12,
   },
 });
