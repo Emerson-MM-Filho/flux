@@ -1,11 +1,20 @@
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
 import React, { useMemo, useState } from "react"
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native"
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import AnalyticCard from "../../components/AnalyticsCard"
 import Header from "../../components/Header"
-import TransactionsList from '../../components/TransactionsList'
-import TransactionInterface from '../../interfaces/transaction'
+import { ThemedText } from "../../components/ThemedText"
+import { ThemedView } from "../../components/ThemedView"
+import TransactionForm from "../../components/TransactionForm"
+import TransactionsList from "../../components/TransactionsList"
 
 export default function HomeScreen() {
   const snapPoints = useMemo(() => ["45%", "82%"], []);
@@ -175,6 +184,8 @@ export default function HomeScreen() {
     },
   ] as TransactionInterface[]);
 
+  const [contentToShow, setContentToShow] = useState("transactions");
+
   return (
     <SafeAreaView style={styles.tabContainer}>
       <Header />
@@ -238,15 +249,35 @@ export default function HomeScreen() {
         backgroundStyle={{ backgroundColor: "#2E2E2E" }}
         handleIndicatorStyle={{ backgroundColor: "#fff", width: "25%" }}
       >
-        <BottomSheetView style={styles.bottomSheet}>
-          <Text style={styles.bottomSheetTitle}>Transactions</Text>
-          <View style={styles.addTransactionBtn}>
-            <View style={styles.addTransactionBtnIconContainer}>
-              <Image source={require("@/assets/images/add-icon.png")} />
-            </View>
-            <Text style={styles.addTransactionBtnText}>Add new</Text>
-          </View>
-          <TransactionsList transactions={transactions}/>
+        <BottomSheetView>
+          {contentToShow === "transactions" && (
+            <ThemedView style={styles.bottomSheet}>
+              <ThemedText style={styles.bottomSheetTitle}>
+                Transactions
+              </ThemedText>
+              <TouchableOpacity
+                style={styles.addTransactionBtn}
+                onPress={() => setContentToShow("transactionForm")}
+              >
+                <View style={styles.addTransactionBtnIconContainer}>
+                  <Image source={require("@/assets/images/add-icon.png")} />
+                </View>
+                <Text style={styles.addTransactionBtnText}>Add new</Text>
+              </TouchableOpacity>
+              <TransactionsList />
+            </ThemedView>
+          )}
+          {contentToShow === "transactionForm" && (
+            <ThemedView style={styles.bottomSheet}>
+              <ThemedView style={styles.bottomSheetHeader}>
+                <ThemedText style={styles.bottomSheetTitle}>New</ThemedText>
+                <ThemedText onPress={() => setContentToShow("transactions")}>
+                  Cancel
+                </ThemedText>
+              </ThemedView>
+              <TransactionForm />
+            </ThemedView>
+          )}
         </BottomSheetView>
       </BottomSheet>
     </SafeAreaView>
@@ -306,6 +337,10 @@ const styles = StyleSheet.create({
     color: "white",
     rowGap: 20,
   },
+  bottomSheetHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   bottomSheetTitle: {
     color: "white",
     fontSize: 16,
@@ -324,7 +359,6 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 8,
-    backgroundColor: "rgba(190, 190, 190, 0.5)",
     alignItems: "center",
     justifyContent: "center",
   },
