@@ -1,5 +1,5 @@
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
-import React, { useMemo, useState } from "react"
+import React, { useState } from "react"
 import {
   Image,
   ScrollView,
@@ -17,8 +17,6 @@ import TransactionForm from "../../components/TransactionForm"
 import TransactionsList from "../../components/TransactionsList"
 
 export default function HomeScreen() {
-  const snapPoints = useMemo(() => ["45%", "82%"], []);
-
   const [contentToShow, setContentToShow] = useState("transactions");
 
   return (
@@ -80,7 +78,7 @@ export default function HomeScreen() {
         </ScrollView>
       </View>
       <BottomSheet
-        snapPoints={snapPoints}
+        snapPoints={["25%", "90%"]}
         backgroundStyle={{ backgroundColor: "#2E2E2E" }}
         handleIndicatorStyle={{ backgroundColor: "#fff", width: "25%" }}
       >
