@@ -2,7 +2,6 @@ import React from 'react'
 import { Controller, useForm } from "react-hook-form"
 import { Button, StyleSheet, TextInput } from "react-native"
 import { CategoryIcons } from "./CategoryIcons"
-import { Icon } from './Icon'
 import { Tag } from './Tag'
 import { ThemedText } from "./ThemedText"
 import { ThemedView } from "./ThemedView"
