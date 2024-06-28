@@ -1,4 +1,4 @@
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
+import BottomSheet, { BottomSheetScrollView, BottomSheetView } from "@gorhom/bottom-sheet"
 import React, { useState } from "react"
 import {
   Image,
@@ -81,13 +81,27 @@ export default function HomeScreen() {
         snapPoints={["25%", "90%"]}
         backgroundStyle={{ backgroundColor: "#2E2E2E" }}
         handleIndicatorStyle={{ backgroundColor: "#fff", width: "25%" }}
+        enableOverDrag={true}
+        style={styles.bottomSheet}
       >
         <BottomSheetView>
           {contentToShow === "transactions" && (
-            <ThemedView style={styles.bottomSheet}>
-              <ThemedText style={styles.bottomSheetTitle}>
-                Transactions
+            <ThemedView style={styles.bottomSheetHeader}>
+            <ThemedText style={styles.bottomSheetTitle}>Transactions</ThemedText>
+          </ThemedView>
+          )}
+          {contentToShow === "transactionForm" && (
+            <ThemedView style={styles.bottomSheetHeader}>
+              <ThemedText style={styles.bottomSheetTitle}>New</ThemedText>
+              <ThemedText onPress={() => setContentToShow("transactions")}>
+                Cancel
               </ThemedText>
+            </ThemedView>
+          )}
+        </BottomSheetView>
+        <BottomSheetScrollView>
+          {contentToShow === "transactions" && (
+            <>
               <TouchableOpacity
                 style={styles.addTransactionBtn}
                 onPress={() => setContentToShow("transactionForm")}
@@ -98,20 +112,12 @@ export default function HomeScreen() {
                 <Text style={styles.addTransactionBtnText}>Add new</Text>
               </TouchableOpacity>
               <TransactionsList />
-            </ThemedView>
+            </>
           )}
           {contentToShow === "transactionForm" && (
-            <ThemedView style={styles.bottomSheet}>
-              <ThemedView style={styles.bottomSheetHeader}>
-                <ThemedText style={styles.bottomSheetTitle}>New</ThemedText>
-                <ThemedText onPress={() => setContentToShow("transactions")}>
-                  Cancel
-                </ThemedText>
-              </ThemedView>
-              <TransactionForm />
-            </ThemedView>
+            <TransactionForm style={{paddingBottom: "50%"}} />
           )}
-        </BottomSheetView>
+        </BottomSheetScrollView>
       </BottomSheet>
     </SafeAreaView>
   );
@@ -173,6 +179,7 @@ const styles = StyleSheet.create({
   bottomSheetHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
+    paddingBottom: 16,
   },
   bottomSheetTitle: {
     color: "white",

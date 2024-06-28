@@ -29,6 +29,6 @@ export default TransactionsList;
 const styles = StyleSheet.create({
   transactionList: {
     rowGap: 16,
-    paddingBottom: 68,
+    paddingBottom: "50%",
   },
 });
