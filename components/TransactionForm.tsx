@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Controller, useForm } from "react-hook-form"
 import { Button, StyleSheet, TextInput } from "react-native"
 import { CategoryIcons } from "./CategoryIcons"
@@ -6,12 +6,15 @@ import { Tag } from './Tag'
 import { ThemedText } from "./ThemedText"
 import { ThemedView } from "./ThemedView"
 
+
 interface TransactionFormProps {
   style?: any;
 }
 
 
 const TransactionForm = ({ style }: TransactionFormProps) => {
+  const [contentToShow, setContentToShow] = useState("transactionForm");
+
   const {
     control,
     handleSubmit,
@@ -30,120 +33,129 @@ const TransactionForm = ({ style }: TransactionFormProps) => {
 
   return (
     <ThemedView style={{...styles.mainContainer, ...style}}>
-      <CategoryIcons />
-      <ThemedView style={styles.between}>
-        <ThemedText>Mercado</ThemedText>
-        <Controller
-          control={control}
-          rules={{ required: true }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-                placeholder="Due Date"
+      {contentToShow === "transactionForm" && (
+        <>
+          <CategoryIcons onSearchPress={() => setContentToShow("categorySearch")}/>
+          <ThemedView style={styles.between}>
+            <ThemedText>Mercado</ThemedText>
+            <Controller
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                    placeholder="Due Date"
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    style={{color: "#838383"}}
+                  />
+              )}
+              name="due_date"
+            />
+          </ThemedView>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <ThemedView style={styles.amountContainer}>
+                <ThemedText style={styles.amountText}>- $</ThemedText>
+                <TextInput
+                  placeholder="Amount"
+                  placeholderTextColor="white"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  style={{...styles.amountText, ...styles.amountInput}}
+                />
+              </ThemedView>
+            )}
+            name="amount"
+          />
+          {errors.amount && <ThemedText>This is required.</ThemedText>}
+          <ThemedView style={styles.typeContainer}>
+            <ThemedText style={styles.typeItem}>Fixo</ThemedText>
+            <ThemedText style={{...styles.typeItem, backgroundColor: "#B4B4B4", color: "#262626"}}>Variável</ThemedText>
+            <ThemedText style={styles.typeItem}>Extra</ThemedText>
+          </ThemedView>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                placeholder="Name"
+                placeholderTextColor="white"
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                style={{color: "#838383"}}
+                style={styles.textInput}
               />
-          )}
-          name="due_date"
-        />
-      </ThemedView>
-      <Controller
-        control={control}
-        rules={{ required: true }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <ThemedView style={styles.amountContainer}>
-            <ThemedText style={styles.amountText}>- $</ThemedText>
-            <TextInput
-              placeholder="Amount"
-              placeholderTextColor="white"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              style={{...styles.amountText, ...styles.amountInput}}
+            )}
+            name="name"
+          />
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                placeholder="Bank Account"
+                placeholderTextColor="white"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                style={styles.textInput}
+              />
+            )}
+            name="bank_account"
+          />
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                placeholder="Operation Type"
+                placeholderTextColor="white"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                style={styles.textInput}
+              />
+            )}
+            name="operation_type"
+          />
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                placeholder="Description"
+                placeholderTextColor="white"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                style={{...styles.textInput, height: 120}}
+                multiline={true}
+                numberOfLines={4}
+              />
+            )}
+            name="description"
+          />
+          <ThemedView style={styles.tagContainer}>
+            <Tag
+              id={1}
+              name="Food"
+              mainColor="#F54545"
+              backgroundColor="#8F1616"
             />
+            <ThemedText style={{color: "#838383", fontSize: 12}}>+ New Tag</ThemedText>
           </ThemedView>
-        )}
-        name="amount"
-      />
-      {errors.amount && <ThemedText>This is required.</ThemedText>}
-      <ThemedView style={styles.typeContainer}>
-        <ThemedText style={styles.typeItem}>Fixo</ThemedText>
-        <ThemedText style={{...styles.typeItem, backgroundColor: "#B4B4B4", color: "#262626"}}>Variável</ThemedText>
-        <ThemedText style={styles.typeItem}>Extra</ThemedText>
-      </ThemedView>
-      <Controller
-        control={control}
-        rules={{ required: true }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            placeholder="Name"
-            placeholderTextColor="white"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            style={styles.textInput}
-          />
-        )}
-        name="name"
-      />
-      <Controller
-        control={control}
-        rules={{ required: true }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            placeholder="Bank Account"
-            placeholderTextColor="white"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            style={styles.textInput}
-          />
-        )}
-        name="bank_account"
-      />
-      <Controller
-        control={control}
-        rules={{ required: true }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            placeholder="Operation Type"
-            placeholderTextColor="white"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            style={styles.textInput}
-          />
-        )}
-        name="operation_type"
-      />
-      <Controller
-        control={control}
-        rules={{ required: true }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            placeholder="Description"
-            placeholderTextColor="white"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            style={{...styles.textInput, height: 120}}
-            multiline={true}
-            numberOfLines={4}
-          />
-        )}
-        name="description"
-      />
-      <ThemedView style={styles.tagContainer}>
-        <Tag
-          id={1}
-          name="Food"
-          mainColor="#F54545"
-          backgroundColor="#8F1616"
-        />
-        <ThemedText style={{color: "#838383", fontSize: 12}}>+ New Tag</ThemedText>
-      </ThemedView>
-      <Button title="Submit" onPress={handleSubmit(onSubmit)} />
+          <Button title="Submit" onPress={handleSubmit(onSubmit)} />
+        </>
+      )}
+      {contentToShow === "categorySearch" && (
+        <ThemedView>
+          <ThemedText>Category Search</ThemedText>
+        </ThemedView>
+      )}
     </ThemedView>
   );
 };

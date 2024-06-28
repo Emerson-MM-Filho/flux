@@ -1,8 +1,13 @@
 import { StyleSheet } from 'react-native'
 import { Icon } from './Icon'
 import { ThemedView } from './ThemedView'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
-export const CategoryIcons = () => {
+interface CategoryIconsProps {
+    onSearchPress: () => void;
+}
+
+export const CategoryIcons = ({ onSearchPress }: CategoryIconsProps) => {
     return (
         <ThemedView style={styles.container}>
             <Icon icon={require("@/assets/images/cart-icon.png")} backgroundColor='#262626' borderWidth={2} borderColor='#DC9E00'/>
@@ -10,7 +15,11 @@ export const CategoryIcons = () => {
             <Icon icon={require("@/assets/images/cart-icon.png")} backgroundColor='#262626'/>
             <Icon icon={require("@/assets/images/cart-icon.png")} backgroundColor='#262626'/>
             <Icon icon={require("@/assets/images/cart-icon.png")} backgroundColor='#262626'/>
-            <Icon icon={require("@/assets/images/search-icon.png")} backgroundColor='#838383'/>
+            <TouchableOpacity
+                onPress={onSearchPress}
+              >
+                <Icon icon={require("@/assets/images/search-icon.png")} backgroundColor='#838383'/>
+            </TouchableOpacity>
         </ThemedView>
     )
 };
