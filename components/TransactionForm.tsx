@@ -6,7 +6,12 @@ import { Tag } from './Tag'
 import { ThemedText } from "./ThemedText"
 import { ThemedView } from "./ThemedView"
 
-const TransactionForm = () => {
+interface TransactionFormProps {
+  style?: any;
+}
+
+
+const TransactionForm = ({ style }: TransactionFormProps) => {
   const {
     control,
     handleSubmit,
@@ -24,7 +29,7 @@ const TransactionForm = () => {
   const onSubmit = (data: any) => console.log(data);
 
   return (
-    <ThemedView style={styles.mainContainer}>
+    <ThemedView style={{...styles.mainContainer, ...style}}>
       <CategoryIcons />
       <ThemedView style={styles.between}>
         <ThemedText>Mercado</ThemedText>
