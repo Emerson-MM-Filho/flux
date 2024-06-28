@@ -134,15 +134,15 @@ const TransactionForm = ({ style }: TransactionFormProps) => {
         )}
         name="description"
       />
-      <ThemedText>
+      <ThemedView style={styles.tagContainer}>
         <Tag
           id={1}
           name="Food"
           mainColor="#F54545"
           backgroundColor="#8F1616"
         />
-        <ThemedText style={{color: "#838383"}}>+ New Tag</ThemedText>
-      </ThemedText>
+        <ThemedText style={{color: "#838383", fontSize: 12}}>+ New Tag</ThemedText>
+      </ThemedView>
       <Button title="Submit" onPress={handleSubmit(onSubmit)} />
     </ThemedView>
   );
@@ -190,5 +190,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     color: "white",
-  }
+  },
+  tagContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
 });
