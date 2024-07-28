@@ -5,6 +5,7 @@ import { CategoryIcons } from "./CategoryIcons"
 import { Tag } from './Tag'
 import { ThemedText } from "./ThemedText"
 import { ThemedView } from "./ThemedView"
+import { CategoryInterface } from '@/interfaces/category'
 
 
 interface TransactionFormProps {
@@ -14,6 +15,40 @@ interface TransactionFormProps {
 
 const TransactionForm = ({ style }: TransactionFormProps) => {
   const [contentToShow, setContentToShow] = useState("transactionForm");
+  const [categories, setCategories] = useState<CategoryInterface[]>([
+    {
+      id: "1",
+      name: "Food",
+      icon: require("@/assets/images/cart-icon.png"),
+      color: "#F54545",
+    },
+    {
+      id: "2",
+      name: "Transport",
+      icon: require("@/assets/images/cart-icon.png"),
+      color: "#F5A445",
+    },
+    {
+      id: "3",
+      name: "Health",
+      icon: require("@/assets/images/cart-icon.png"),
+      color: "#45F545",
+    },
+    {
+      id: "4",
+      name: "Education",
+      icon: require("@/assets/images/cart-icon.png"),
+      color: "#45F5A4",
+    },
+    {
+      id: "5",
+      name: "Entertainment",
+      icon: require("@/assets/images/cart-icon.png"),
+      color: "#4545F5",
+    },
+  ]);
+  const [selectedCategory, setSelectedCategory] = useState<CategoryInterface | null>(categories[0]);
+
 
   const {
     control,
@@ -21,9 +56,9 @@ const TransactionForm = ({ style }: TransactionFormProps) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      amount: "49,25",
-      due_date: "19/06/2024",
-      name: "Mercado Público",
+      amount: "0,00",
+      due_date: `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`,
+      name: "Name",
       bank_account: "",
       operation_type: "Débito",
       description: "",
@@ -35,9 +70,14 @@ const TransactionForm = ({ style }: TransactionFormProps) => {
     <ThemedView style={{...styles.mainContainer, ...style}}>
       {contentToShow === "transactionForm" && (
         <>
-          <CategoryIcons onSearchPress={() => setContentToShow("categorySearch")}/>
+          <CategoryIcons
+            onSearchPress={() => setContentToShow("categorySearch")}
+            categories={categories}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
           <ThemedView style={styles.between}>
-            <ThemedText>Mercado</ThemedText>
+            <ThemedText style={{color: selectedCategory.color}}>{selectedCategory.name}</ThemedText>
             <Controller
               control={control}
               rules={{ required: true }}
