@@ -14,7 +14,7 @@ interface TransactionFormProps {
 
 
 const TransactionForm = ({ style }: TransactionFormProps) => {
-  const [contentToShow, setContentToShow] = useState("transactionForm");
+  const [isSearchingCategory, setIsSearchingCategory] = useState(false);
   const [categories, setCategories] = useState<CategoryInterface[]>([
     {
       id: "1",
@@ -98,14 +98,14 @@ const TransactionForm = ({ style }: TransactionFormProps) => {
 
   return (
     <ThemedView style={{...styles.mainContainer, ...style}}>
-      {contentToShow === "transactionForm" && (
+      <CategoryIcons
+        onSearchPress={() => setIsSearchingCategory(true)}
+        categories={categories}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+      />
+      {!isSearchingCategory && (
         <>
-          <CategoryIcons
-            onSearchPress={() => setContentToShow("categorySearch")}
-            categories={categories}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-          />
           <ThemedView style={styles.between}>
             <ThemedText style={{color: selectedCategory.color}}>{selectedCategory.name}</ThemedText>
             <Controller
@@ -220,11 +220,6 @@ const TransactionForm = ({ style }: TransactionFormProps) => {
           </ThemedView>
           <Button title="Submit" onPress={handleSubmit(onSubmit)} />
         </>
-      )}
-      {contentToShow === "categorySearch" && (
-        <ThemedView>
-          <ThemedText>Category Search</ThemedText>
-        </ThemedView>
       )}
     </ThemedView>
   );
