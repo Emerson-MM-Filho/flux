@@ -78,7 +78,7 @@ export default function HomeScreen() {
         </ScrollView>
       </View>
       <BottomSheet
-        snapPoints={["25%", "90%"]}
+        snapPoints={["45%", "90%"]}
         backgroundStyle={{ backgroundColor: "#2E2E2E" }}
         handleIndicatorStyle={{ backgroundColor: "#fff", width: "25%" }}
         enableOverDrag={true}
