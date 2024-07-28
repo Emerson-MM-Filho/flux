@@ -46,6 +46,36 @@ const TransactionForm = ({ style }: TransactionFormProps) => {
       icon: require("@/assets/images/cart-icon.png"),
       color: "#4545F5",
     },
+    {
+      id: "6",
+      name: "Salary",
+      icon: require("@/assets/images/cart-icon.png"),
+      color: "#A445F5",
+    },
+    {
+      id: "7",
+      name: "Savings",
+      icon: require("@/assets/images/cart-icon.png"),
+      color: "#F545F5",
+    },
+    {
+      id: "8",
+      name: "Rent",
+      icon: require("@/assets/images/cart-icon.png"),
+      color: "#F545A4",
+    },
+    {
+      id: "9",
+      name: "Pets",
+      icon: require("@/assets/images/cart-icon.png"),
+      color: "#F5A445",
+    },
+    {
+      id: "10",
+      name: "Others",
+      icon: require("@/assets/images/cart-icon.png"),
+      color: "#A4F545",
+    },
   ]);
   const [selectedCategory, setSelectedCategory] = useState<CategoryInterface | null>(categories[0]);
 
