@@ -1,4 +1,4 @@
-import { StyleSheet, FlatList, TextInput } from 'react-native'
+import { StyleSheet, FlatList, TextInput, Image } from 'react-native'
 import { Icon } from './Icon'
 import { ThemedView } from './ThemedView'
 import { TouchableOpacity } from 'react-native-gesture-handler'
@@ -7,15 +7,24 @@ import { useState } from 'react';
 import { ThemedText } from './ThemedText';
 
 interface CategoryIconsProps {
-    onSearchPress: () => void;
-    onCategorySelect: () => void;
+    searchPressCallback: () => void;
+    categorySelectedCallback: () => void;
+    cancelCallback: () => void;
     categories: CategoryInterface[];
     setCategories: (categories: CategoryInterface[]) => void;
     setSelectedCategory: (category: CategoryInterface) => void;
     selectedCategory: CategoryInterface | null;
 }
 
-export const CategoryIcons = ({ onSearchPress, categories, setSelectedCategory, selectedCategory, setCategories, onCategorySelect }: CategoryIconsProps) => {
+export const CategoryIcons = ({
+    searchPressCallback,
+    categories,
+    setSelectedCategory,
+    selectedCategory,
+    setCategories,
+    categorySelectedCallback,
+    cancelCallback
+}: CategoryIconsProps) => {
     const [showAllCategories, setShowAllCategories] = useState(false);
     const [filteredCategories, setFilteredCategories] = useState<CategoryInterface[]>(categories);
     const [searchText, setSearchText] = useState('');
@@ -39,7 +48,7 @@ export const CategoryIcons = ({ onSearchPress, categories, setSelectedCategory, 
         return data;
     }
 
-    const selectCategory = (category: CategoryInterface) => {
+    const handleCategorySelection = (category: CategoryInterface) => {
         setSelectedCategory(category);
         setShowAllCategories(false);
 
@@ -47,10 +56,11 @@ export const CategoryIcons = ({ onSearchPress, categories, setSelectedCategory, 
         newCategories.unshift(category);
         setFilteredCategories(newCategories);
         setCategories(newCategories);
-        onCategorySelect();
+        setSearchText('');
+        categorySelectedCallback();
     }
 
-    const onSearch = (e: any) => {
+    const handleSearchInputChange = (e: any) => {
         if (e.nativeEvent.text === '') {
             setFilteredCategories(categories);
             return;
@@ -61,15 +71,27 @@ export const CategoryIcons = ({ onSearchPress, categories, setSelectedCategory, 
         setFilteredCategories(filtered);
     }
 
+    const cancelCategorySearch = () => {
+        setShowAllCategories(false);
+        setFilteredCategories(categories);
+        setSearchText('');
+        cancelCallback();
+    }
+
     return (
         <ThemedView>
             {
                 showAllCategories ? (
                     <>
+                        <TouchableOpacity onPress={cancelCategorySearch} style={styles.searchingHeaderStyle}>
+                            <Image source={require("@/assets/images/arrow-left.png")} />
+                            <ThemedText style={{color: '#838383'}}>Search category</ThemedText>
+                            <ThemedText></ThemedText>
+                        </TouchableOpacity>
                         <TextInput
                             placeholder='Search for a category'
                             style={styles.searchInput}
-                            onChange={onSearch}
+                            onChange={handleSearchInputChange}
                         />
                         <FlatList
                             data={createRows(filteredCategories, columns)}
@@ -82,7 +104,7 @@ export const CategoryIcons = ({ onSearchPress, categories, setSelectedCategory, 
                                 if (isEmpty) cardStyle = {...styles.categoryCard, backgroundColor: 'transparent'};
                                 return (
                                     <TouchableOpacity
-                                        onPress={() => isEmpty ? null : selectCategory(item)}
+                                        onPress={() => isEmpty ? null : handleCategorySelection(item)}
                                         key={item.id}
                                         style={cardStyle}
                                     >
@@ -122,7 +144,7 @@ export const CategoryIcons = ({ onSearchPress, categories, setSelectedCategory, 
                         <TouchableOpacity
                             onPress={() => {
                                 setShowAllCategories(true);
-                                onSearchPress();
+                                searchPressCallback();
                             }}
                         >
                             <Icon icon={require("@/assets/images/search-icon.png")} backgroundColor='#838383'/>
@@ -167,5 +189,11 @@ const styles = StyleSheet.create({
     },
     newCategoryText: {
         color: '#838383',
-    }
+    },
+    searchingHeaderStyle: {
+      justifyContent: "space-between",
+      flexDirection: "row",
+      alignItems: "center",
+      marginBottom: 16,
+    },
 });

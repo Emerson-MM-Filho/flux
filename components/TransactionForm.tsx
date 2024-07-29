@@ -10,10 +10,11 @@ import { CategoryInterface } from '@/interfaces/category'
 
 interface TransactionFormProps {
   style?: any;
+  onCancel: () => void;
 }
 
 
-const TransactionForm = ({ style }: TransactionFormProps) => {
+const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
   const [isSearchingCategory, setIsSearchingCategory] = useState(false);
   const [categories, setCategories] = useState<CategoryInterface[]>([
     {
@@ -96,11 +97,26 @@ const TransactionForm = ({ style }: TransactionFormProps) => {
   });
   const onSubmit = (data: any) => console.log(data);
 
+  const cancelForm = () => {
+    onCancel();
+  }
+
   return (
     <ThemedView style={{...styles.mainContainer, ...style}}>
+      {
+        isSearchingCategory ? null : (
+          <ThemedView style={styles.bottomSheetHeader}>
+            <ThemedText style={styles.bottomSheetTitle}>New transaction</ThemedText>
+            <ThemedText style={{color: "#838383"}} onPress={cancelForm}>
+              Cancel
+            </ThemedText>
+          </ThemedView>
+        )
+      }
       <CategoryIcons
-        onSearchPress={() => setIsSearchingCategory(true)}
-        onCategorySelect={() => setIsSearchingCategory(false)}
+        searchPressCallback={() => setIsSearchingCategory(true)}
+        categorySelectedCallback={() => setIsSearchingCategory(false)}
+        cancelCallback={() => setIsSearchingCategory(false)}
         categories={categories}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
@@ -276,4 +292,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 8,
   },
+  bottomSheetHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingBottom: 16,
+  },
+  bottomSheetTitle: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  searchingHeaderStyle: {
+    justifyContent: "flex-start",
+    flexDirection: "row",
+    alignItems: "center"
+  }
 });

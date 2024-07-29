@@ -87,37 +87,27 @@ export default function HomeScreen() {
         <BottomSheetView>
           {contentToShow === "transactions" && (
             <ThemedView style={styles.bottomSheetHeader}>
-            <ThemedText style={styles.bottomSheetTitle}>Transactions</ThemedText>
-          </ThemedView>
-          )}
-          {contentToShow === "transactionForm" && (
-            <ThemedView style={styles.bottomSheetHeader}>
-              <ThemedText style={styles.bottomSheetTitle}>New</ThemedText>
-              <ThemedText onPress={() => setContentToShow("transactions")}>
-                Cancel
-              </ThemedText>
+              <ThemedText style={styles.bottomSheetTitle}>Transactions</ThemedText>
             </ThemedView>
           )}
         </BottomSheetView>
-        <BottomSheetScrollView>
-          {contentToShow === "transactions" && (
-            <>
-              <TouchableOpacity
-                style={styles.addTransactionBtn}
-                onPress={() => setContentToShow("transactionForm")}
-              >
-                <View style={styles.addTransactionBtnIconContainer}>
-                  <Image source={require("@/assets/images/add-icon.png")} />
-                </View>
-                <Text style={styles.addTransactionBtnText}>Add new</Text>
-              </TouchableOpacity>
-              <TransactionsList />
-            </>
-          )}
-          {contentToShow === "transactionForm" && (
-            <TransactionForm style={{paddingBottom: "50%"}} />
-          )}
-        </BottomSheetScrollView>
+        {contentToShow === "transactionForm" && (
+          <TransactionForm style={{paddingBottom: "50%"}} onCancel={() => setContentToShow("transactions")} />
+        )}
+        {contentToShow === "transactions" && (
+          <BottomSheetScrollView>
+            <TouchableOpacity
+              style={styles.addTransactionBtn}
+              onPress={() => setContentToShow("transactionForm")}
+            >
+              <View style={styles.addTransactionBtnIconContainer}>
+                <Image source={require("@/assets/images/add-icon.png")} />
+              </View>
+              <Text style={styles.addTransactionBtnText}>Add new</Text>
+            </TouchableOpacity>
+            <TransactionsList />
+          </BottomSheetScrollView>
+        )}
       </BottomSheet>
     </SafeAreaView>
   );
@@ -194,6 +184,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: "#2A2A2A",
     gap: 8,
+    marginBottom: 16,
   },
   addTransactionBtnIconContainer: {
     width: 52,
