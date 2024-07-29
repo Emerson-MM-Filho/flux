@@ -83,11 +83,13 @@ export const CategoryIcons = ({
             {
                 showAllCategories ? (
                     <>
-                        <TouchableOpacity onPress={cancelCategorySearch} style={styles.searchingHeaderStyle}>
-                            <Image source={require("@/assets/images/arrow-left.png")} />
+                        <ThemedView  style={styles.searchingHeaderStyle}>
+                            <TouchableOpacity onPress={cancelCategorySearch}>
+                                <Image source={require("@/assets/images/arrow-left.png")} />
+                            </TouchableOpacity>
                             <ThemedText style={{color: '#838383'}}>Search category</ThemedText>
                             <ThemedText></ThemedText>
-                        </TouchableOpacity>
+                        </ThemedView>
                         <TextInput
                             placeholder='Search for a category'
                             style={styles.searchInput}
