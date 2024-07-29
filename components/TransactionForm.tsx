@@ -100,9 +100,11 @@ const TransactionForm = ({ style }: TransactionFormProps) => {
     <ThemedView style={{...styles.mainContainer, ...style}}>
       <CategoryIcons
         onSearchPress={() => setIsSearchingCategory(true)}
+        onCategorySelect={() => setIsSearchingCategory(false)}
         categories={categories}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
+        setCategories={setCategories}
       />
       {!isSearchingCategory && (
         <>

@@ -5,16 +5,17 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import CategoryInterface from '@/interfaces/category';
 import { useState } from 'react';
 import { ThemedText } from './ThemedText';
-import { set } from 'react-hook-form';
 
 interface CategoryIconsProps {
     onSearchPress: () => void;
+    onCategorySelect: () => void;
     categories: CategoryInterface[];
+    setCategories: (categories: CategoryInterface[]) => void;
     setSelectedCategory: (category: CategoryInterface) => void;
     selectedCategory: CategoryInterface | null;
 }
 
-export const CategoryIcons = ({ onSearchPress, categories, setSelectedCategory, selectedCategory }: CategoryIconsProps) => {
+export const CategoryIcons = ({ onSearchPress, categories, setSelectedCategory, selectedCategory, setCategories, onCategorySelect }: CategoryIconsProps) => {
     const [showAllCategories, setShowAllCategories] = useState(false);
     const [filteredCategories, setFilteredCategories] = useState<CategoryInterface[]>(categories);
     const [searchText, setSearchText] = useState('');
@@ -36,6 +37,17 @@ export const CategoryIcons = ({ onSearchPress, categories, setSelectedCategory, 
             lastRowElements += 1;
         }
         return data;
+    }
+
+    const selectCategory = (category: CategoryInterface) => {
+        setSelectedCategory(category);
+        setShowAllCategories(false);
+
+        const newCategories = categories.filter(c => c.id !== category.id);
+        newCategories.unshift(category);
+        setFilteredCategories(newCategories);
+        setCategories(newCategories);
+        onCategorySelect();
     }
 
     const onSearch = (e: any) => {
@@ -70,7 +82,7 @@ export const CategoryIcons = ({ onSearchPress, categories, setSelectedCategory, 
                                 if (isEmpty) cardStyle = {...styles.categoryCard, backgroundColor: 'transparent'};
                                 return (
                                     <TouchableOpacity
-                                        onPress={() => setSelectedCategory(item)}
+                                        onPress={() => isEmpty ? null : selectCategory(item)}
                                         key={item.id}
                                         style={cardStyle}
                                     >
