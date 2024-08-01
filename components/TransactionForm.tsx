@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Controller, useForm } from "react-hook-form"
-import { Button, StyleSheet, TextInput } from "react-native"
+import { Button, StyleSheet, TextInput, Image } from "react-native"
 import { CategoryIcons } from "./CategoryIcons"
 import { Tag } from './Tag'
 import { ThemedText } from "./ThemedText"
@@ -29,11 +29,13 @@ const operation_type_data = [
   { label: 'Débit', value: '2', icon: icon('dollar-sign') },
 ];
 
+const dropdownLeftIcon = { width: 24, height: 24 }
 const bank_account_data = [
-  { label: 'Nubank', value: '1', icon: icon('credit-card') },
-  { label: 'Inter', value: '2', icon: icon('credit-card') },
-  { label: 'Bradesco', value: '3', icon: icon('credit-card') },
-  { label: 'C6', value: '4', icon: icon('credit-card') },
+  { label: 'Nubank', value: '1', icon: <Image source={require("@/assets/images/nubank-logo.png")} style={dropdownLeftIcon}/> },
+  { label: 'Inter', value: '2', icon: <Image source={require("@/assets/images/inter-logo.png")} style={dropdownLeftIcon}/> },
+  { label: 'Bradesco', value: '3', icon: <Image source={require("@/assets/images/bradesco-logo.png")} style={dropdownLeftIcon}/> },
+  { label: 'C6', value: '4', icon: <Image source={require("@/assets/images/c6-logo.png")} style={dropdownLeftIcon}/> },
+  { label: 'Banco do Brasil', value: '5', icon: <Image source={require("@/assets/images/banco-do-brasil-logo.png")} style={dropdownLeftIcon}/> },
 ]
 
 

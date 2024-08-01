@@ -28,7 +28,6 @@ const DropdownComponent = ({data, onBlur, onChange, value, searchField, leftIcon
             selectedTextStyle={styles.selectedTextStyle}
             itemContainerStyle={styles.itemContainerStyle}
             containerStyle={styles.containerStyle}
-            iconStyle={styles.iconStyle}
             activeColor="#222"
             labelField="label"
             valueField="value"
@@ -61,10 +60,7 @@ const styles = StyleSheet.create({
     },
     selectedTextStyle: {
         color: "white",
-    },
-    iconStyle: {
-        width: 20,
-        height: 20,
+        marginLeft: 8,
     },
     itemContainerStyle: {
         flexDirection: "row",
