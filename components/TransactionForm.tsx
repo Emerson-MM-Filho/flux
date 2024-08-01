@@ -6,6 +6,7 @@ import { Tag } from './Tag'
 import { ThemedText } from "./ThemedText"
 import { ThemedView } from "./ThemedView"
 import { CategoryInterface } from '@/interfaces/category'
+import DropdownComponent from './OperationTypeDropdown'
 
 
 interface TransactionFormProps {
@@ -78,23 +79,31 @@ const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
       color: "#A4F545",
     },
   ]);
-  const [selectedCategory, setSelectedCategory] = useState<CategoryInterface | null>(categories[0]);
+  const [selectedCategory, setSelectedCategory] = useState<CategoryInterface>(categories[0]);
+  const [showInstallmentsField, setShowInstallmentsField] = useState(true);
 
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const {control, handleSubmit, formState: { errors }, watch} = useForm({
     defaultValues: {
       amount: "0,00",
       due_date: `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`,
       name: "Name",
       bank_account: "",
-      operation_type: "Débito",
+      operation_type: "1",
       description: "",
+      installments: "1",
     },
   });
+    const triggerOperationTypeField = watch('operation_type', '1');
+
+    React.useEffect(() => {
+      if (triggerOperationTypeField === '1') {
+        setShowInstallmentsField(true);
+      } else {
+        setShowInstallmentsField(false);
+      }
+    }, [triggerOperationTypeField]);
+
+
   const onSubmit = (data: any) => console.log(data);
 
   const cancelForm = () => {
@@ -195,21 +204,40 @@ const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
             )}
             name="bank_account"
           />
-          <Controller
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                placeholder="Operation Type"
-                placeholderTextColor="white"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                style={styles.textInput}
-              />
-            )}
-            name="operation_type"
-          />
+          <ThemedView style={styles.operationContainer}>
+            <Controller
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <DropdownComponent
+                  onBlur={onBlur}
+                  onChange={onChange}
+                  value={value}
+                />
+              )}
+              name="operation_type"
+            />
+            {
+              showInstallmentsField && (
+                <Controller
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      placeholder="Installments"
+                      placeholderTextColor="white"
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      style={[styles.textInput, {flex: 1}]}
+                    />
+                  )}
+                  name="installments"
+                />
+              )
+            }
+
+          </ThemedView>
           <Controller
             control={control}
             rules={{ required: true }}
@@ -306,5 +334,12 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     flexDirection: "row",
     alignItems: "center"
-  }
+  },
+  operationContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    flexGrow: 1,
+    gap: 8,
+  },
 });
