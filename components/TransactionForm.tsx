@@ -29,6 +29,13 @@ const operation_type_data = [
   { label: 'Débit', value: '2', icon: icon('dollar-sign') },
 ];
 
+const bank_account_data = [
+  { label: 'Nubank', value: '1', icon: icon('credit-card') },
+  { label: 'Inter', value: '2', icon: icon('credit-card') },
+  { label: 'Bradesco', value: '3', icon: icon('credit-card') },
+  { label: 'C6', value: '4', icon: icon('credit-card') },
+]
+
 
 const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
   const [isSearchingCategory, setIsSearchingCategory] = useState(false);
@@ -96,19 +103,21 @@ const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
   ]);
   const [selectedCategory, setSelectedCategory] = useState<CategoryInterface>(categories[0]);
   const [showInstallmentsField, setShowInstallmentsField] = useState(true);
+  const [currentBankAccountIcon, setCurrentBankAccountIcon] = useState(bank_account_data[0].icon);
 
   const {control, handleSubmit, formState: { errors }, watch} = useForm({
     defaultValues: {
       amount: "0,00",
       due_date: `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`,
-      name: "Name",
-      bank_account: "",
+      name: "",
+      bank_account: "1",
       operation_type: "1",
       description: "",
       installments: "1",
     },
   });
     const triggerOperationTypeField = watch('operation_type', '1');
+    const triggerBankAccountField = watch('bank_account', '1');
 
     React.useEffect(() => {
       if (triggerOperationTypeField === '1') {
@@ -116,7 +125,9 @@ const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
       } else {
         setShowInstallmentsField(false);
       }
-    }, [triggerOperationTypeField]);
+
+      setCurrentBankAccountIcon(bank_account_data.find(item => item.value === triggerBankAccountField)?.icon || bank_account_data[0].icon);
+    }, [triggerOperationTypeField, triggerBankAccountField]);
 
 
   const onSubmit = (data: any) => console.log(data);
@@ -208,13 +219,12 @@ const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
             control={control}
             rules={{ required: true }}
             render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                placeholder="Bank Account"
-                placeholderTextColor="white"
+              <DropdownComponent
+                data={bank_account_data}
                 onBlur={onBlur}
-                onChangeText={onChange}
+                onChange={onChange}
                 value={value}
-                style={styles.textInput}
+                leftIcon={currentBankAccountIcon}
               />
             )}
             name="bank_account"
