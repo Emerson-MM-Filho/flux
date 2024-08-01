@@ -1,48 +1,49 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-import Feather from '@expo/vector-icons/Feather';
 
-const data = [
-    { label: 'Credit Card', value: '1' },
-    { label: 'Débit', value: '2' },
-];
+
+interface DropdownData {
+    label: string;
+    value: string;
+    image?: string;
+    icon?: React.JSX.Element;
+}
 
 interface DropdownComponentProps {
+    data: DropdownData[];
+    searchField?: keyof DropdownData;
     onBlur: () => void;
     onChange: (value: string) => void;
     value: string;
+    leftIcon?: React.JSX.Element;
+    dropdownStyle?: object;
 }
 
-const DropdownComponent = ({onBlur, onChange, value}: DropdownComponentProps) => {
+const DropdownComponent = ({data, onBlur, onChange, value, searchField, leftIcon, dropdownStyle }: DropdownComponentProps) => {
     return (
         <Dropdown
             data={data}
-            style={styles.dropdown}
+            style={[styles.dropdown, dropdownStyle]}
             selectedTextStyle={styles.selectedTextStyle}
             itemContainerStyle={styles.itemContainerStyle}
             containerStyle={styles.containerStyle}
-            itemTextStyle={styles.itemTextStyle}
             iconStyle={styles.iconStyle}
             activeColor="#222"
             labelField="label"
             valueField="value"
+            searchField={searchField}
             value={value}
             onBlur={onBlur}
-            onChange={item => {
-                onChange(item.value);
-            }}
-            renderLeftIcon={() => {
-                let icon = "credit-card";
-                if (value === "2") {
-                    icon = "dollar-sign";
-                }
-                return <Feather
-                    style={styles.icon}
-                    color={'white'}
-                    name={icon}
-                    size={20}
-                />
+            onChange={item => onChange(item.value)}
+            renderLeftIcon={() => leftIcon}
+            renderItem={(item) => {
+                return (
+                    <View style={styles.itemContainerStyle}>
+                        {item.icon}
+                        <Text style={styles.itemTextStyle}>{item.label}</Text>
+                    </View>
+                );
             }}
         />
     );
@@ -57,10 +58,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 12,
         color: "white",
-        flex: 1
-    },
-    icon: {
-        marginRight: 5,
     },
     selectedTextStyle: {
         color: "white",
@@ -70,11 +67,16 @@ const styles = StyleSheet.create({
         height: 20,
     },
     itemContainerStyle: {
-        backgroundColor: "#333",
+        flexDirection: "row",
+        alignItems: "center",
         borderRadius: 8,
+        padding: 8,
+        gap: 8,
     },
     itemTextStyle: {
         color: "white",
+        flex: 1,
+        fontSize: 16,
     },
     containerStyle: {
         backgroundColor: "#333",

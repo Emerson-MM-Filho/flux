@@ -6,13 +6,28 @@ import { Tag } from './Tag'
 import { ThemedText } from "./ThemedText"
 import { ThemedView } from "./ThemedView"
 import { CategoryInterface } from '@/interfaces/category'
-import DropdownComponent from './OperationTypeDropdown'
+import DropdownComponent from './Dropdown'
+import Feather from '@expo/vector-icons/Feather';
 
 
 interface TransactionFormProps {
   style?: any;
   onCancel: () => void;
 }
+
+const icon = (icon: string) => (
+  <Feather
+    style={[{marginRight: 5}]}
+    color={'white'}
+    name={icon}
+    size={20}
+  />
+)
+
+const operation_type_data = [
+  { label: 'Credit Card', value: '1', icon: icon('credit-card') },
+  { label: 'Débit', value: '2', icon: icon('dollar-sign') },
+];
 
 
 const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
@@ -210,9 +225,12 @@ const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
               rules={{ required: true }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <DropdownComponent
+                  data={operation_type_data}
                   onBlur={onBlur}
                   onChange={onChange}
                   value={value}
+                  leftIcon={showInstallmentsField ? icon('credit-card') : icon('dollar-sign')}
+                  dropdownStyle={{flex: 1}}
                 />
               )}
               name="operation_type"
