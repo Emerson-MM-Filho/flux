@@ -18,14 +18,15 @@ interface DropdownComponentProps {
     value: string;
     leftIcon?: React.JSX.Element;
     dropdownStyle?: object;
+    selectedTextStyle?: object;
 }
 
-const DropdownComponent = ({data, onBlur, onChange, value, searchField, leftIcon, dropdownStyle }: DropdownComponentProps) => {
+const DropdownComponent = ({data, onBlur, onChange, value, searchField, leftIcon, dropdownStyle, selectedTextStyle }: DropdownComponentProps) => {
     return (
         <Dropdown
             data={data}
             style={[styles.dropdown, dropdownStyle]}
-            selectedTextStyle={styles.selectedTextStyle}
+            selectedTextStyle={[styles.selectedTextStyle, selectedTextStyle]}
             itemContainerStyle={styles.itemContainerStyle}
             containerStyle={styles.containerStyle}
             activeColor="#222"
@@ -60,7 +61,6 @@ const styles = StyleSheet.create({
     },
     selectedTextStyle: {
         color: "white",
-        marginLeft: 8,
     },
     itemContainerStyle: {
         flexDirection: "row",

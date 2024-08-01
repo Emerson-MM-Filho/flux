@@ -227,6 +227,7 @@ const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
                 onChange={onChange}
                 value={value}
                 leftIcon={currentBankAccountIcon}
+                selectedTextStyle={{ marginLeft: 8 }}
               />
             )}
             name="bank_account"
