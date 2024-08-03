@@ -13,7 +13,7 @@ const TransactionCard = ({
 }: TransactionInterface) => {
   return (
     <View style={styles.cardContainer} key={id}>
-      <Icon icon={category.icon}/>
+      <Icon iconName={category.icon} iconColor={category.color} backgroundColor="#222"/>
       <View style={styles.cardContent}>
         <View style={styles.topContent}>
           <Text style={styles.title}>{title}</Text>

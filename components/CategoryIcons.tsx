@@ -30,19 +30,14 @@ export const CategoryIcons = ({
     const [searchText, setSearchText] = useState('');
     const columns = 5;
 
-    function createRows(data: CategoryInterface[], columns: number) {
+    function createRows(data: (CategoryInterface | null)[], columns: number) {
         const rows = Math.floor(data.length / columns);
         let lastRowElements = data.length - (rows * columns);
         while (lastRowElements !== columns) {
             if (lastRowElements === 0) {
                 break;
             }
-            data.push({
-                id: `empty-${lastRowElements}`,
-                name: '',
-                icon: '',
-                color: '',
-            });
+            data.push(null);
             lastRowElements += 1;
         }
         return data;
@@ -97,23 +92,26 @@ export const CategoryIcons = ({
                         />
                         <FlatList
                             data={createRows(filteredCategories, columns)}
-                            keyExtractor={item => item.id}
+                            keyExtractor={item => item ? item.id.toString() : Math.random().toString()}
                             numColumns={columns}
                             columnWrapperStyle={{justifyContent: 'space-between'}}
                             renderItem={({ item }) => {
-                                const isEmpty = item.id.includes('empty');
                                 let cardStyle = styles.categoryCard;
-                                if (isEmpty) cardStyle = {...styles.categoryCard, backgroundColor: 'transparent'};
+                                if (!item) cardStyle = {...styles.categoryCard, backgroundColor: 'transparent'};
                                 return (
                                     <TouchableOpacity
-                                        onPress={() => isEmpty ? null : handleCategorySelection(item)}
-                                        key={item.id}
+                                        onPress={() => item === null ? null : handleCategorySelection(item)}
+                                        key={item ? item.id : 'empty'}
                                         style={cardStyle}
                                     >
-                                        <Icon icon={item.icon} backgroundColor={item.color}/>
-                                        <ThemedText style={styles.categoryName}>
-                                            {(item.name.length > 5) ? item.name.slice(0, 5) + '...' : item.name}
-                                        </ThemedText>
+                                        {item && (
+                                            <Icon iconName={item.icon} backgroundColor={item.color} />
+                                        )}
+                                        {item && (
+                                            <ThemedText style={styles.categoryName}>
+                                                {(item.name.length > 5) ? item.name.slice(0, 5) + '...' : item.name}
+                                            </ThemedText>
+                                        )}
                                     </TouchableOpacity>
                                 );
                             }}
@@ -135,7 +133,8 @@ export const CategoryIcons = ({
                                     key={category.id}
                                 >
                                     <Icon
-                                        icon={category.icon}
+                                        iconName={category.icon}
+                                        iconColor={selectedCategory?.id === category.id ? category.color : undefined}
                                         backgroundColor={'#262626'}
                                         borderWidth={selectedCategory?.id === category.id ? 2 : 0}
                                         borderColor={selectedCategory?.id === category.id ? category.color : undefined}
@@ -149,7 +148,7 @@ export const CategoryIcons = ({
                                 searchPressCallback();
                             }}
                         >
-                            <Icon icon={require("@/assets/images/search-icon.png")} backgroundColor='#838383'/>
+                            <Icon iconName={require("@/assets/images/search-icon.png")} backgroundColor='#838383'/>
                         </TouchableOpacity>
                     </ThemedView>
                 )

@@ -1,17 +1,15 @@
 import TransactionInterface from "../interfaces/transaction";
+import { useCategories } from "./useCategories";
 
 export const useTransactions = () => {
+  const categories = useCategories()
   return [
     {
-      id: 1,
+      id: 0,
       title: "Fort Atacadista 1",
       date: "12/03/2024",
       value: "- R$ 15,68",
-      category: {
-        id: "1",
-        name: "Compras",
-        icon: require("@/assets/images/cart-icon.png"),
-      },
+      category: categories[0],
       tags: [
         {
           id: 1,
@@ -34,134 +32,66 @@ export const useTransactions = () => {
       ],
     },
     {
-      id: 2,
+      id: 1,
       title: "Fort Atacadista 2",
       date: "12/03/2024",
-      category: {
-        id: "1",
-        name: "Compras",
-        icon: require("@/assets/images/cart-icon.png"),
-      },
+      category: categories[1],
+      value: "- R$ 15,68",
+      tags: [],
+    },
+    {
+      id: 2,
+      title: "Fort Atacadista 3",
+      date: "12/03/2024",
+      category: categories[2],
       value: "- R$ 15,68",
       tags: [],
     },
     {
       id: 3,
-      title: "Fort Atacadista 3",
+      title: "Fort Atacadista 4",
       date: "12/03/2024",
-      category: {
-        id: "1",
-        name: "Compras",
-        icon: require("@/assets/images/cart-icon.png"),
-      },
+      category: categories[3],
       value: "- R$ 15,68",
       tags: [],
     },
     {
       id: 4,
-      title: "Fort Atacadista 4",
+      title: "Fort Atacadista 5",
       date: "12/03/2024",
-      category: {
-        id: "1",
-        name: "Compras",
-        icon: require("@/assets/images/cart-icon.png"),
-      },
+      category: categories[4],
       value: "- R$ 15,68",
       tags: [],
     },
     {
       id: 5,
-      title: "Fort Atacadista 5",
+      title: "Fort Atacadista 6",
       date: "12/03/2024",
-      category: {
-        id: "1",
-        name: "Compras",
-        icon: require("@/assets/images/cart-icon.png"),
-      },
+      category: categories[5],
       value: "- R$ 15,68",
       tags: [],
     },
     {
       id: 6,
-      title: "Fort Atacadista 6",
+      title: "Fort Atacadista 7",
       date: "12/03/2024",
-      category: {
-        id: "1",
-        name: "Compras",
-        icon: require("@/assets/images/cart-icon.png"),
-      },
+      category: categories[6],
       value: "- R$ 15,68",
       tags: [],
     },
     {
       id: 7,
-      title: "Fort Atacadista 7",
+      title: "Fort Atacadista 8",
       date: "12/03/2024",
-      category: {
-        id: "1",
-        name: "Compras",
-        icon: require("@/assets/images/cart-icon.png"),
-      },
+      category: categories[7],
       value: "- R$ 15,68",
       tags: [],
     },
     {
       id: 8,
-      title: "Fort Atacadista 8",
-      date: "12/03/2024",
-      category: {
-        id: "1",
-        name: "Compras",
-        icon: require("@/assets/images/cart-icon.png"),
-      },
-      value: "- R$ 15,68",
-      tags: [],
-    },
-    {
-      id: 9,
       title: "Fort Atacadista 9",
       date: "12/03/2024",
-      category: {
-        id: "1",
-        name: "Compras",
-        icon: require("@/assets/images/cart-icon.png"),
-      },
-      value: "- R$ 15,68",
-      tags: [],
-    },
-    {
-      id: 10,
-      title: "Fort Atacadista 10",
-      date: "12/03/2024",
-      category: {
-        id: "1",
-        name: "Compras",
-        icon: require("@/assets/images/cart-icon.png"),
-      },
-      value: "- R$ 15,68",
-      tags: [],
-    },
-    {
-      id: 11,
-      title: "Fort Atacadista 11",
-      date: "12/03/2024",
-      category: {
-        id: "1",
-        name: "Compras",
-        icon: require("@/assets/images/cart-icon.png"),
-      },
-      value: "- R$ 15,68",
-      tags: [],
-    },
-    {
-      id: 12,
-      title: "Fort Atacadista 12",
-      date: "12/03/2024",
-      category: {
-        id: "1",
-        name: "Compras",
-        icon: require("@/assets/images/cart-icon.png"),
-      },
+      category: categories[8],
       value: "- R$ 15,68",
       tags: [],
     },

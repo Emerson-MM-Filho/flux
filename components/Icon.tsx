@@ -1,17 +1,22 @@
-import { Image, StyleSheet, View } from "react-native"
+import Feather from '@expo/vector-icons/Feather';
+import { StyleSheet, View } from "react-native"
 
 interface IconProps {
-  icon: any;
+  iconName: keyof typeof Feather.glyphMap;
+  iconColor?: string;
   backgroundColor?: string;
   borderWidth?: number;
   borderColor?: string;
+  style?: object;
 }
 
 export const Icon = ({
-  icon,
+  iconName: icon,
+  iconColor,
   backgroundColor,
   borderWidth,
   borderColor,
+  style,
 }: IconProps) => {
   const styles = StyleSheet.create({
     container: {
@@ -24,15 +29,16 @@ export const Icon = ({
       borderWidth: borderWidth ?? 0,
       borderColor: borderColor ?? "transparent",
     },
-    icon: {
-      width: 24,
-      height: 24,
-    },
   });
 
   return (
     <View style={styles.container}>
-      <Image style={styles.icon} source={icon} />
+      <Feather
+        style={style ? style : {}}
+        color={iconColor ?? "white"}
+        name={icon}
+        size={24}
+      />
     </View>
   );
 };

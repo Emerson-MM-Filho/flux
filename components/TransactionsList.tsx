@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet } from "react-native"
-import { useTransactions } from "../hooks/useTransactions"
 import TransactionCard from "./TransactionCard"
+import { useTransactions } from "@/hooks/useTransactions";
 
 const TransactionsList = () => {
   const transactions = useTransactions();

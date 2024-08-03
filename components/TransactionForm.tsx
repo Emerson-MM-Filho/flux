@@ -5,9 +5,10 @@ import { CategoryIcons } from "./CategoryIcons"
 import { Tag } from './Tag'
 import { ThemedText } from "./ThemedText"
 import { ThemedView } from "./ThemedView"
-import { CategoryInterface } from '@/interfaces/category'
+import CategoryInterface from '@/interfaces/category'
 import DropdownComponent from './Dropdown'
-import Feather from '@expo/vector-icons/Feather';
+import { useCategories } from '@/hooks/useCategories'
+import OperationInterface from '@/interfaces/operation'
 
 
 interface TransactionFormProps {
@@ -15,97 +16,27 @@ interface TransactionFormProps {
   onCancel: () => void;
 }
 
-const icon = (icon: string) => (
-  <Feather
-    style={[{marginRight: 5}]}
-    color={'white'}
-    name={icon}
-    size={20}
-  />
-)
-
 const operation_type_data = [
-  { label: 'Credit Card', value: '1', icon: icon('credit-card') },
-  { label: 'Débit', value: '2', icon: icon('dollar-sign') },
-];
+  { label: 'Credit Card', value: '1', icon: { name: 'credit-card' } },
+  { label: 'Débit', value: '2', icon: { name: 'dollar-sign' } },
+] as OperationInterface[];
 
 const dropdownLeftIcon = { width: 24, height: 24 }
 const bank_account_data = [
-  { label: 'Nubank', value: '1', icon: <Image source={require("@/assets/images/nubank-logo.png")} style={dropdownLeftIcon}/> },
-  { label: 'Inter', value: '2', icon: <Image source={require("@/assets/images/inter-logo.png")} style={dropdownLeftIcon}/> },
-  { label: 'Bradesco', value: '3', icon: <Image source={require("@/assets/images/bradesco-logo.png")} style={dropdownLeftIcon}/> },
-  { label: 'C6', value: '4', icon: <Image source={require("@/assets/images/c6-logo.png")} style={dropdownLeftIcon}/> },
-  { label: 'Banco do Brasil', value: '5', icon: <Image source={require("@/assets/images/banco-do-brasil-logo.png")} style={dropdownLeftIcon}/> },
+  { label: 'Nubank', value: '1', image: <Image source={require("@/assets/images/nubank-logo.png")} style={dropdownLeftIcon}/> },
+  { label: 'Inter', value: '2', image: <Image source={require("@/assets/images/inter-logo.png")} style={dropdownLeftIcon}/> },
+  { label: 'Bradesco', value: '3', image: <Image source={require("@/assets/images/bradesco-logo.png")} style={dropdownLeftIcon}/> },
+  { label: 'C6', value: '4', image: <Image source={require("@/assets/images/c6-logo.png")} style={dropdownLeftIcon}/> },
+  { label: 'Banco do Brasil', value: '5', image: <Image source={require("@/assets/images/banco-do-brasil-logo.png")} style={dropdownLeftIcon}/> },
 ]
 
 
 const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
   const [isSearchingCategory, setIsSearchingCategory] = useState(false);
-  const [categories, setCategories] = useState<CategoryInterface[]>([
-    {
-      id: "1",
-      name: "Food",
-      icon: require("@/assets/images/cart-icon.png"),
-      color: "#F54545",
-    },
-    {
-      id: "2",
-      name: "Transport",
-      icon: require("@/assets/images/cart-icon.png"),
-      color: "#F5A445",
-    },
-    {
-      id: "3",
-      name: "Health",
-      icon: require("@/assets/images/cart-icon.png"),
-      color: "#45F545",
-    },
-    {
-      id: "4",
-      name: "Education",
-      icon: require("@/assets/images/cart-icon.png"),
-      color: "#45F5A4",
-    },
-    {
-      id: "5",
-      name: "Entertainment",
-      icon: require("@/assets/images/cart-icon.png"),
-      color: "#4545F5",
-    },
-    {
-      id: "6",
-      name: "Salary",
-      icon: require("@/assets/images/cart-icon.png"),
-      color: "#A445F5",
-    },
-    {
-      id: "7",
-      name: "Savings",
-      icon: require("@/assets/images/cart-icon.png"),
-      color: "#F545F5",
-    },
-    {
-      id: "8",
-      name: "Rent",
-      icon: require("@/assets/images/cart-icon.png"),
-      color: "#F545A4",
-    },
-    {
-      id: "9",
-      name: "Pets",
-      icon: require("@/assets/images/cart-icon.png"),
-      color: "#F5A445",
-    },
-    {
-      id: "10",
-      name: "Others",
-      icon: require("@/assets/images/cart-icon.png"),
-      color: "#A4F545",
-    },
-  ]);
+  const [categories, setCategories] = useState<CategoryInterface[]>(useCategories());
   const [selectedCategory, setSelectedCategory] = useState<CategoryInterface>(categories[0]);
   const [showInstallmentsField, setShowInstallmentsField] = useState(true);
-  const [currentBankAccountIcon, setCurrentBankAccountIcon] = useState(bank_account_data[0].icon);
+  const [currentBankAccountImage, setCurrentBankAccountImage] = useState(bank_account_data[0].image);
 
   const {control, handleSubmit, formState: { errors }, watch} = useForm({
     defaultValues: {
@@ -128,7 +59,7 @@ const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
         setShowInstallmentsField(false);
       }
 
-      setCurrentBankAccountIcon(bank_account_data.find(item => item.value === triggerBankAccountField)?.icon || bank_account_data[0].icon);
+      setCurrentBankAccountImage(bank_account_data.find(item => item.value === triggerBankAccountField)?.image || bank_account_data[0].image);
     }, [triggerOperationTypeField, triggerBankAccountField]);
 
 
@@ -226,8 +157,8 @@ const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
                 onBlur={onBlur}
                 onChange={onChange}
                 value={value}
-                leftIcon={currentBankAccountIcon}
-                selectedTextStyle={{ marginLeft: 8 }}
+                leftIcon={currentBankAccountImage}
+                selectedTextStyle={{  marginLeft: 8 }}
               />
             )}
             name="bank_account"
@@ -242,7 +173,7 @@ const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
                   onBlur={onBlur}
                   onChange={onChange}
                   value={value}
-                  leftIcon={showInstallmentsField ? icon('credit-card') : icon('dollar-sign')}
+                  leftIcon={showInstallmentsField ? {name: 'credit-card'} : {name: 'dollar-sign'}}
                   dropdownStyle={{flex: 1}}
                 />
               )}

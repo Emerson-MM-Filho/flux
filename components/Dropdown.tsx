@@ -1,13 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
+import { Icon } from './Icon';
+import IconInterface from '@/interfaces/icon';
 
 
 interface DropdownData {
     label: string;
     value: string;
-    image?: string;
-    icon?: React.JSX.Element;
+    image?: React.JSX.Element;
+    icon?: IconInterface
 }
 
 interface DropdownComponentProps {
@@ -16,7 +18,7 @@ interface DropdownComponentProps {
     onBlur: () => void;
     onChange: (value: string) => void;
     value: string;
-    leftIcon?: React.JSX.Element;
+    leftIcon?: IconInterface | React.JSX.Element;
     dropdownStyle?: object;
     selectedTextStyle?: object;
 }
@@ -36,11 +38,20 @@ const DropdownComponent = ({data, onBlur, onChange, value, searchField, leftIcon
             value={value}
             onBlur={onBlur}
             onChange={item => onChange(item.value)}
-            renderLeftIcon={() => leftIcon}
+            renderLeftIcon={() => {
+                if (leftIcon) {
+                    if ('name' in leftIcon) { 
+                        return <Icon iconName={leftIcon.name} iconColor={leftIcon.color} />;
+                    } else {
+                        return leftIcon;
+                    }
+                }
+            }}
             renderItem={(item) => {
                 return (
                     <View style={styles.itemContainerStyle}>
-                        {item.icon}
+                        {item.icon && (<Icon iconName={item.icon?.name} iconColor={item.icon?.color} />)}
+                        {item.image && item.image}
                         <Text style={styles.itemTextStyle}>{item.label}</Text>
                     </View>
                 );

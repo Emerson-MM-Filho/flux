@@ -1,6 +1,10 @@
-export interface CategoryInterface {
-  id: string;
+import { Feather } from '@expo/vector-icons';
+
+interface CategoryInterface {
+  id: number;
   name: string;
-  icon: any;
+  icon: keyof typeof Feather.glyphMap;
   color: string;
 }
+
+export default CategoryInterface;
