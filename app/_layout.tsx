@@ -13,8 +13,15 @@ import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useColorScheme } from "@/hooks/useColorScheme"
 import { StatusBar } from "expo-status-bar"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform } from "react-native"
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+const DismissKeyboard = ({ children }: { children: React.ReactNode }) => (
+  <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    {children}
+  </TouchableWithoutFeedback>
+);
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -34,17 +41,19 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <GestureHandlerRootView>
-        <StatusBar style="dark"/>
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-        </ThemeProvider>
-      </GestureHandlerRootView>
+      <DismissKeyboard>
+        <GestureHandlerRootView>
+          <StatusBar style="dark"/>
+          <ThemeProvider
+            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+          >
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+          </ThemeProvider>
+        </GestureHandlerRootView>
+      </DismissKeyboard>
     </SafeAreaProvider>
   );
 }
