@@ -122,6 +122,8 @@ const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
                   onChangeText={onChange}
                   value={value}
                   style={{...styles.amountText, ...styles.amountInput}}
+                  keyboardType='decimal-pad'
+                  selectTextOnFocus
                 />
               </ThemedView>
             )}
@@ -192,6 +194,7 @@ const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
                       onChangeText={onChange}
                       value={value}
                       style={[styles.textInput, {flex: 1}]}
+                      keyboardType='number-pad'
                     />
                   )}
                   name="installments"
