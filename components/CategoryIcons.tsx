@@ -25,7 +25,7 @@ export const CategoryIcons = ({
   categorySelectedCallback,
   cancelCallback
 }: CategoryIconsProps) => {
-  const [showAllCategories, setShowAllCategories] = useState(false);
+  const [contentToShow, setContentToShow] = useState("quickSelect");
   const [filteredCategories, setFilteredCategories] = useState<CategoryInterface[]>(categories);
   const [searchText, setSearchText] = useState('');
   const columns = 5;
@@ -45,7 +45,7 @@ export const CategoryIcons = ({
 
   const handleCategorySelection = (category: CategoryInterface) => {
     setSelectedCategory(category);
-    setShowAllCategories(false);
+    setContentToShow("quickSelect");
 
     const newCategories = categories.filter(c => c.id !== category.id);
     newCategories.unshift(category);
@@ -67,7 +67,7 @@ export const CategoryIcons = ({
   }
 
   const cancelCategorySearch = () => {
-    setShowAllCategories(false);
+    setContentToShow("quickSelect");
     setFilteredCategories(categories);
     setSearchText('');
     cancelCallback();
@@ -75,91 +75,90 @@ export const CategoryIcons = ({
 
   return (
     <ThemedView>
-      {
-        showAllCategories ? (
-          <>
-            <ThemedView style={styles.searchingHeaderStyle}>
-              <TouchableOpacity onPress={cancelCategorySearch}>
-                <Image source={require("@/assets/images/arrow-left.png")} />
+      {contentToShow === "quickSelect" && (
+        <ThemedView style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          {
+            categories.slice(0, 5).map(category => (
+              <TouchableOpacity
+                onPress={() => setSelectedCategory(category)}
+                key={category.id}
+              >
+                <Icon
+                  iconName={category.icon}
+                  iconColor={selectedCategory?.id === category.id ? category.color : undefined}
+                  containerStyle={{
+                    backgroundColor: '#262626',
+                    borderWidth: selectedCategory?.id === category.id ? 2 : 0,
+                    borderColor: selectedCategory?.id === category.id ? category.color : undefined,
+                  }}
+                />
               </TouchableOpacity>
-              <ThemedText style={{ color: '#838383' }}>Search category</ThemedText>
-              <ThemedText></ThemedText>
-            </ThemedView>
-            <TextInput
-              placeholder='Search for a category'
-              style={styles.searchInput}
-              onChange={handleSearchInputChange}
-            />
-            <FlatList
-              data={createRows(filteredCategories, columns)}
-              keyExtractor={item => item ? item.id.toString() : Math.random().toString()}
-              numColumns={columns}
-              columnWrapperStyle={{ justifyContent: 'space-between' }}
-              renderItem={({ item }) => {
-                let cardStyle = styles.categoryCard;
-                if (!item) cardStyle = { ...styles.categoryCard, backgroundColor: 'transparent' };
-                return (
-                  <TouchableOpacity
-                    onPress={() => item === null ? null : handleCategorySelection(item)}
-                    key={item ? item.id : 'empty'}
-                    style={cardStyle}
-                  >
-                    {item && (
-                      <Icon iconName={item.icon} containerStyle={{ backgroundColor: item.color }} />
-                    )}
-                    {item && (
-                      <ThemedText style={styles.categoryName}>
-                        {(item.name.length > 5) ? item.name.slice(0, 5) + '...' : item.name}
-                      </ThemedText>
-                    )}
-                  </TouchableOpacity>
-                );
+            ))
+          }
+          <TouchableOpacity
+            onPress={() => {
+              setContentToShow("search");
+              searchPressCallback();
+            }}
+          >
+            <Icon
+              iconName={"search"}
+              containerStyle={{
+                backgroundColor: '#838383',
               }}
             />
-            {
-              searchText !== '' && (
-                <TouchableOpacity onPress={() => setShowAllCategories(false)} style={styles.newCategoryContainer}>
-                  <ThemedText style={styles.newCategoryText}>+ Add "{searchText}"</ThemedText>
-                </TouchableOpacity>
-              )
-            }
-          </>
-        ) : (
-          <ThemedView style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            {
-              categories.slice(0, 5).map(category => (
-                <TouchableOpacity
-                  onPress={() => setSelectedCategory(category)}
-                  key={category.id}
-                >
-                  <Icon
-                    iconName={category.icon}
-                    iconColor={selectedCategory?.id === category.id ? category.color : undefined}
-                    containerStyle={{
-                      backgroundColor: '#262626',
-                      borderWidth: selectedCategory?.id === category.id ? 2 : 0,
-                      borderColor: selectedCategory?.id === category.id ? category.color : undefined,
-                    }}
-                  />
-                </TouchableOpacity>
-              ))
-            }
-            <TouchableOpacity
-              onPress={() => {
-                setShowAllCategories(true);
-                searchPressCallback();
-              }}
-            >
-              <Icon
-                iconName={"search"}
-                containerStyle={{
-                  backgroundColor: '#838383',
-                }}
-              />
+          </TouchableOpacity>
+        </ThemedView>
+      )}
+      {contentToShow === "search" && (
+        <>
+          <ThemedView style={styles.searchingHeaderStyle}>
+            <TouchableOpacity onPress={cancelCategorySearch}>
+              <Image source={require("@/assets/images/arrow-left.png")} />
             </TouchableOpacity>
+            <ThemedText style={{ color: '#838383' }}>Search category</ThemedText>
+            <ThemedText></ThemedText>
           </ThemedView>
-        )
-      }
+          <TextInput
+            placeholder='Search for a category'
+            style={styles.searchInput}
+            onChange={handleSearchInputChange}
+          />
+          <FlatList
+            data={createRows(filteredCategories, columns)}
+            keyExtractor={item => item ? item.id.toString() : Math.random().toString()}
+            numColumns={columns}
+            columnWrapperStyle={{ justifyContent: 'space-between' }}
+            renderItem={({ item }) => {
+              let cardStyle = styles.categoryCard;
+              if (!item) cardStyle = { ...styles.categoryCard, backgroundColor: 'transparent' };
+              return (
+                <TouchableOpacity
+                  onPress={() => item === null ? null : handleCategorySelection(item)}
+                  key={item ? item.id : 'empty'}
+                  style={cardStyle}
+                >
+                  {item && (
+                    <Icon iconName={item.icon} containerStyle={{ backgroundColor: item.color }} />
+                  )}
+                  {item && (
+                    <ThemedText style={styles.categoryName}>
+                      {(item.name.length > 5) ? item.name.slice(0, 5) + '...' : item.name}
+                    </ThemedText>
+                  )}
+                </TouchableOpacity>
+              );
+            }}
+          />
+          {
+            searchText !== '' && (
+              <TouchableOpacity onPress={() => setContentToShow("newCategory")} style={styles.newCategoryContainer}>
+                <ThemedText style={styles.newCategoryText}>+ Add "{searchText}"</ThemedText>
+              </TouchableOpacity>
+            )
+          }
+        </>
+      )}
     </ThemedView>
   )
 };
