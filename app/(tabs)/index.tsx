@@ -96,7 +96,7 @@ export default function HomeScreen() {
           <TransactionForm style={{paddingBottom: "50%"}} onCancel={() => setContentToShow("transactions")} />
         )}
         {contentToShow === "transactions" && (
-          <BottomSheetScrollView>
+          <>
             <TouchableOpacity
               style={styles.addTransactionBtn}
               onPress={() => setContentToShow("transactionForm")}
@@ -106,8 +106,10 @@ export default function HomeScreen() {
               </View>
               <Text style={styles.addTransactionBtnText}>Add new</Text>
             </TouchableOpacity>
-            <TransactionsList />
-          </BottomSheetScrollView>
+            <BottomSheetScrollView>
+              <TransactionsList />
+            </BottomSheetScrollView>
+          </>
         )}
       </BottomSheet>
     </SafeAreaView>
