@@ -15,6 +15,7 @@ import { ThemedText } from "../../components/ThemedText"
 import { ThemedView } from "../../components/ThemedView"
 import TransactionForm from "../../components/TransactionForm"
 import TransactionsList from "../../components/TransactionsList"
+import { Icon } from "@/components/Icon"
 
 export default function HomeScreen() {
   const [contentToShow, setContentToShow] = useState("transactions");
@@ -101,7 +102,7 @@ export default function HomeScreen() {
               onPress={() => setContentToShow("transactionForm")}
             >
               <View style={styles.addTransactionBtnIconContainer}>
-                <Image source={require("@/assets/images/add-icon.png")} />
+                <Icon iconName="plus-square" />
               </View>
               <Text style={styles.addTransactionBtnText}>Add new</Text>
             </TouchableOpacity>
