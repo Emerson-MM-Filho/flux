@@ -93,7 +93,9 @@ export default function HomeScreen() {
           )}
         </BottomSheetView>
         {contentToShow === "transactionForm" && (
-          <TransactionForm style={{paddingBottom: "50%"}} onCancel={() => setContentToShow("transactions")} />
+          <BottomSheetScrollView>
+            <TransactionForm style={{marginBottom: "50%"}} onCancel={() => setContentToShow("transactions")} />
+          </BottomSheetScrollView>
         )}
         {contentToShow === "transactions" && (
           <>
