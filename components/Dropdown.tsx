@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { Icon } from './Icon';
 import IconInterface from '@/interfaces/icon';
@@ -44,7 +44,6 @@ const DropdownComponent = ({data, onBlur, onChange, value, searchField, leftIcon
                         return <Icon
                             iconName={leftIcon.name}
                             iconColor={leftIcon.color}
-                            backgroundColor='transparent'
                             containerStyle={{
                                 width: 24,
                                 height: 24,
