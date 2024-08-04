@@ -1,5 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 
+export const availableIcons = Object.keys(Feather.glyphMap) as (keyof typeof Feather.glyphMap)[];
+
 interface CategoryInterface {
   id: number;
   name: string;
