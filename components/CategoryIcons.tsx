@@ -62,7 +62,7 @@ export const CategoryIcons = ({
     }
 
     setSearchText(e.nativeEvent.text);
-    const filtered = categories.filter(category => category.name.toLowerCase().startsWith(e.nativeEvent.text.toLowerCase()));
+    const filtered = categories.filter(category => category?.name.toLowerCase().startsWith(e.nativeEvent.text.toLowerCase()));
     setFilteredCategories(filtered);
   }
 
