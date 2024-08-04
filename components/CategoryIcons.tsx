@@ -47,7 +47,7 @@ export const CategoryIcons = ({
     setSelectedCategory(category);
     setContentToShow("quickSelect");
 
-    const newCategories = categories.filter(c => c.id !== category.id);
+    const newCategories = categories.filter(c => c?.id !== category.id);
     newCategories.unshift(category);
     setFilteredCategories(newCategories);
     setCategories(newCategories);
