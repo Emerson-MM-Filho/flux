@@ -5,6 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import CategoryInterface, { CreateCategoryInterface, availableIcons } from '@/interfaces/category';
 import { useState } from 'react';
 import { ThemedText } from './ThemedText';
+import { router } from 'expo-router';
 
 const availableColors = [
   '#FF0000', '#FFA500', '#FFFF00', '#008000', '#0000FF', '#4B0082', '#EE82EE', '#FFC0CB', '#FFD700', '#FF8C00',
@@ -14,7 +15,6 @@ const availableColors = [
 
 
 interface CategoryIconsProps {
-  searchPressCallback: () => void;
   categorySelectedCallback: () => void;
   cancelCallback: () => void;
   categories: CategoryInterface[];
@@ -24,7 +24,6 @@ interface CategoryIconsProps {
 }
 
 export const CategoryIcons = ({
-  searchPressCallback,
   categories,
   setSelectedCategory,
   selectedCategory,
@@ -131,18 +130,8 @@ export const CategoryIcons = ({
               </TouchableOpacity>
             ))
           }
-          <TouchableOpacity
-            onPress={() => {
-              setContentToShow("search");
-              searchPressCallback();
-            }}
-          >
-            <Icon
-              iconName={"search"}
-              containerStyle={{
-                backgroundColor: '#838383',
-              }}
-            />
+          <TouchableOpacity onPress={() => router.push("searchCategory")}>
+            <Icon iconName={"search"} containerStyle={{ backgroundColor: '#838383' }} />
           </TouchableOpacity>
         </ThemedView>
       )}

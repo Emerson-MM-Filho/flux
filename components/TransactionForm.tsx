@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from "react-hook-form"
 import { Button, StyleSheet, TextInput, Image, View } from "react-native"
 import { CategoryIcons } from "./CategoryIcons"
@@ -11,6 +11,8 @@ import { useCategories } from '@/hooks/useCategories'
 import OperationInterface from '@/interfaces/operation'
 import { MultiSelect } from 'react-native-element-dropdown'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import RNDateTimePicker from '@react-native-community/datetimepicker';
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
 
 function darkenHexColor(hex: string, amount: number = 40): string {
   // Remove the hash at the start if it's there
@@ -37,7 +39,7 @@ function darkenHexColor(hex: string, amount: number = 40): string {
 
 interface TransactionFormProps {
   style?: any;
-  onCancel: () => void;
+  selectedCategoryId?: number;
 }
 
 const operation_type_data = [
@@ -69,17 +71,33 @@ const tags_data = [
 ]
 
 
-const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
+const TransactionForm = ({ style, selectedCategoryId }: TransactionFormProps) => {
   const [isSearchingCategory, setIsSearchingCategory] = useState(false);
   const [categories, setCategories] = useState<CategoryInterface[]>(useCategories());
-  const [selectedCategory, setSelectedCategory] = useState<CategoryInterface>(categories[0]);
+  const [selectedCategory, setSelectedCategory] = useState<CategoryInterface>(categories.find(category => category.id === selectedCategoryId) || categories[0]);
   const [showInstallmentsField, setShowInstallmentsField] = useState(true);
   const [currentBankAccountImage, setCurrentBankAccountImage] = useState(bank_account_data[0].image);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  useEffect(() => {
+    if (selectedCategoryId) {
+      const selected = categories.find(category => category.id === selectedCategoryId);
+      if (!selected) {
+        console.error(`Category with id ${selectedCategoryId} not found`);
+        return;
+      }
+
+      setSelectedCategory(selected);
+      const newCategories = categories.filter(c => c?.id !== selectedCategoryId);
+      newCategories.unshift(selected);
+      setCategories(newCategories);
+    }
+  }, [selectedCategoryId]);
 
   const {control, handleSubmit, formState: { errors }, watch} = useForm({
     defaultValues: {
       amount: "0,00",
-      due_date: `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`,
+      due_date: new Date(),
       name: "",
       bank_account: "1",
       operation_type: "1",
@@ -102,26 +120,13 @@ const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
     }, [triggerOperationTypeField, triggerBankAccountField]);
 
 
-  const onSubmit = (data: any) => console.log(data);
-
-  const cancelForm = () => {
-    onCancel();
-  }
+  const onSubmit = (data: any) => {
+    console.info(`Creating transaction with data: ${JSON.stringify(data)}`);
+  };
 
   return (
     <ThemedView style={{...styles.mainContainer, ...style}}>
-      {
-        isSearchingCategory ? null : (
-          <ThemedView style={styles.bottomSheetHeader}>
-            <ThemedText style={styles.bottomSheetTitle}>New transaction</ThemedText>
-            <ThemedText style={{color: "#838383"}} onPress={cancelForm}>
-              Cancel
-            </ThemedText>
-          </ThemedView>
-        )
-      }
       <CategoryIcons
-        searchPressCallback={() => setIsSearchingCategory(true)}
         categorySelectedCallback={() => setIsSearchingCategory(false)}
         cancelCallback={() => setIsSearchingCategory(false)}
         categories={categories}
@@ -136,15 +141,31 @@ const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
             <Controller
               control={control}
               rules={{ required: true }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                    placeholder="Due Date"
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    style={{color: "#838383"}}
-                  />
-              )}
+              render={({ field: { onChange, value, ref } }) => {
+                if (showDatePicker) {
+                  return (
+                    <BottomSheet snapPoints={['50%']} >
+                      <BottomSheetView>
+                        <RNDateTimePicker
+                          value={new Date()}
+                          mode="date"
+                          display='spinner'
+                          onChange={(_, selectedDate) => {
+                            onChange(_)
+                          }}
+                          style={{backgroundColor: "transparent"}}
+                        />
+                      </BottomSheetView>
+                    </BottomSheet>
+                  )
+                }
+
+                return (
+                  <TouchableWithoutFeedback onPress={() => setShowDatePicker(true)}>
+                    <ThemedText style={{color: "#838383"}}>{value.toLocaleDateString()}</ThemedText>
+                  </TouchableWithoutFeedback>
+                )
+              }}
               name="due_date"
             />
           </ThemedView>
@@ -281,7 +302,7 @@ const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
                   searchField='name'
                   searchPlaceholder='Search tags'
                   
-                  flatListProps={{contentContainerStyle: {alignItems: 'center', flexDirection: 'row', flexWrap: 'wrap', gap: 8}}}
+                  flatListProps={{contentContainerStyle: {gap: 8}}}
                   
                   activeColor='transparent'
                   containerStyle={{backgroundColor: "#2E2E2E", borderRadius: 8, padding: 12, borderColor: "#838383", borderWidth: 1}}
@@ -374,16 +395,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     color: "white",
-  },
-  bottomSheetHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingBottom: 16,
-  },
-  bottomSheetTitle: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
   },
   searchingHeaderStyle: {
     justifyContent: "flex-start",

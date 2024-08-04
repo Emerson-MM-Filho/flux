@@ -4,16 +4,15 @@ import {
   ThemeProvider,
 } from "@react-navigation/native"
 import { useFonts } from "expo-font"
-import { Stack } from "expo-router"
+import { Stack, Link } from "expo-router"
 import * as SplashScreen from "expo-splash-screen"
 import { useEffect } from "react"
 import "react-native-reanimated"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-
 import { useColorScheme } from "@/hooks/useColorScheme"
 import { StatusBar } from "expo-status-bar"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
-import { TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform } from "react-native"
+import { TouchableWithoutFeedback, Keyboard, StyleSheet } from "react-native"
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -50,6 +49,31 @@ export default function RootLayout() {
             <Stack>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen name="+not-found" />
+              <Stack.Screen
+                name="transactionForm"
+                options={{
+                  title: "New transaction",
+                  presentation: "modal",
+                  headerStyle: { backgroundColor: '#2E2E2E'},
+                  headerLeft: () => (
+                    <Link style={{color: "white"}} href='../'>Cancel</Link>
+                  ),
+                  headerRight: () => (
+                    <Link style={{color: "white", fontWeight: 'bold'}} href='../'>Save</Link>
+                  ),
+                }}
+              />
+              <Stack.Screen
+                name="searchCategory"
+                options={{
+                  title: "Search category",
+                  presentation: "modal",
+                  headerStyle: { backgroundColor: '#2E2E2E'},
+                  headerLeft: () => (
+                    <Link style={{color: "white"}} href='../'>Cancel</Link>
+                  ),
+                }}
+              />
             </Stack>
           </ThemeProvider>
         </GestureHandlerRootView>
@@ -57,3 +81,11 @@ export default function RootLayout() {
     </SafeAreaProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
