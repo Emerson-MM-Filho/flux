@@ -135,9 +135,11 @@ export const CategoryIcons = ({
                                     <Icon
                                         iconName={category.icon}
                                         iconColor={selectedCategory?.id === category.id ? category.color : undefined}
-                                        backgroundColor={'#262626'}
-                                        borderWidth={selectedCategory?.id === category.id ? 2 : 0}
-                                        borderColor={selectedCategory?.id === category.id ? category.color : undefined}
+                                        containerStyle={{
+                                            backgroundColor: '#262626',
+                                            borderWidth: selectedCategory?.id === category.id ? 2 : 0,
+                                            borderColor: selectedCategory?.id === category.id ? category.color : undefined,
+                                        }}
                                     />
                                 </TouchableOpacity>
                             ))
@@ -148,7 +150,12 @@ export const CategoryIcons = ({
                                 searchPressCallback();
                             }}
                         >
-                            <Icon iconName={require("@/assets/images/search-icon.png")} backgroundColor='#838383'/>
+                            <Icon
+                                iconName={"search"}
+                                containerStyle={{
+                                    backgroundColor: '#838383',
+                                }}
+                            />
                         </TouchableOpacity>
                     </ThemedView>
                 )

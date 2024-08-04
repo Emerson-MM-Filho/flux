@@ -41,7 +41,16 @@ const DropdownComponent = ({data, onBlur, onChange, value, searchField, leftIcon
             renderLeftIcon={() => {
                 if (leftIcon) {
                     if ('name' in leftIcon) { 
-                        return <Icon iconName={leftIcon.name} iconColor={leftIcon.color} />;
+                        return <Icon
+                            iconName={leftIcon.name}
+                            iconColor={leftIcon.color}
+                            backgroundColor='transparent'
+                            containerStyle={{
+                                width: 24,
+                                height: 24,
+                                marginRight: 5
+                            }}
+                        />
                     } else {
                         return leftIcon;
                     }
@@ -50,7 +59,17 @@ const DropdownComponent = ({data, onBlur, onChange, value, searchField, leftIcon
             renderItem={(item) => {
                 return (
                     <View style={styles.itemContainerStyle}>
-                        {item.icon && (<Icon iconName={item.icon?.name} iconColor={item.icon?.color} />)}
+                        {item.icon && (
+                            <Icon
+                                iconName={item.icon?.name}
+                                iconColor={item.icon?.color}
+                                containerStyle={{
+                                    width: 24,
+                                    height: 24,
+                                    marginRight: 5
+                                }}
+                            />
+                        )}
                         {item.image && item.image}
                         <Text style={styles.itemTextStyle}>{item.label}</Text>
                     </View>

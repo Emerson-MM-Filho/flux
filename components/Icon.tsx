@@ -4,41 +4,43 @@ import { StyleSheet, View } from "react-native"
 interface IconProps {
   iconName: keyof typeof Feather.glyphMap;
   iconColor?: string;
-  backgroundColor?: string;
-  borderWidth?: number;
-  borderColor?: string;
-  style?: object;
+  iconStyle?: object;
+  containerStyle?: object;
+  containerSize?: "large" | "small";
 }
 
 export const Icon = ({
-  iconName: icon,
+  iconName,
   iconColor,
-  backgroundColor,
-  borderWidth,
-  borderColor,
-  style,
+  iconStyle,
+  containerSize = "large",
+  containerStyle,
 }: IconProps) => {
-  const styles = StyleSheet.create({
-    container: {
-      width: 52,
-      height: 52,
-      borderRadius: 8,
-      backgroundColor: backgroundColor ?? "rgba(190, 190, 190, 0.5)",
-      alignItems: "center",
-      justifyContent: "center",
-      borderWidth: borderWidth ?? 0,
-      borderColor: borderColor ?? "transparent",
-    },
-  });
-
+  const sizeStyle = containerSize === "small" ? styles.smallContainer : styles.largeContainer;
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, sizeStyle, containerStyle]}>
       <Feather
-        style={style ? style : {}}
+        style={iconStyle ? iconStyle : {}}
         color={iconColor ?? "white"}
-        name={icon}
+        name={iconName}
         size={24}
       />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  smallContainer: {
+    width: 24,
+    height: 24,
+  },
+  largeContainer: {
+    width: 52,
+    height: 52,
+  },
+});
