@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Controller, useForm } from "react-hook-form"
-import { Button, StyleSheet, TextInput, Image } from "react-native"
+import { Button, StyleSheet, TextInput, Image, View } from "react-native"
 import { CategoryIcons } from "./CategoryIcons"
 import { Tag } from './Tag'
 import { ThemedText } from "./ThemedText"
@@ -9,7 +9,31 @@ import CategoryInterface from '@/interfaces/category'
 import DropdownComponent from './Dropdown'
 import { useCategories } from '@/hooks/useCategories'
 import OperationInterface from '@/interfaces/operation'
+import { MultiSelect } from 'react-native-element-dropdown'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
+function darkenHexColor(hex: string, amount: number = 40): string {
+  // Remove the hash at the start if it's there
+  hex = hex.replace(/^#/, '');
+
+  // Parse the r, g, b values
+  let r = parseInt(hex.substring(0, 2), 16);
+  let g = parseInt(hex.substring(2, 4), 16);
+  let b = parseInt(hex.substring(4, 6), 16);
+
+  // Decrease each color component by the specified amount
+  r = Math.max(0, r - amount);
+  g = Math.max(0, g - amount);
+  b = Math.max(0, b - amount);
+
+  // Convert r, g, b values back to hex
+  const newHex = '#' +
+      (r < 16 ? '0' : '') + r.toString(16) +
+      (g < 16 ? '0' : '') + g.toString(16) +
+      (b < 16 ? '0' : '') + b.toString(16);
+
+  return newHex;
+}
 
 interface TransactionFormProps {
   style?: any;
@@ -29,6 +53,20 @@ const bank_account_data = [
   { label: 'C6', value: '4', image: <Image source={require("@/assets/images/c6-logo.png")} style={dropdownLeftIcon}/> },
   { label: 'Banco do Brasil', value: '5', image: <Image source={require("@/assets/images/banco-do-brasil-logo.png")} style={dropdownLeftIcon}/> },
 ]
+const tags_data = [
+  { id: 1, name: 'Cinema', color: '#F54545' },
+  { id: 2, name: 'Off site work', color: '#F5A245' },
+  { id: 3, name: 'Travel', color: '#F5F545' },
+  { id: 4, name: 'Food', color: '#45F545' },
+  { id: 5, name: 'Health', color: '#45F5F5' },
+  { id: 6, name: 'Clothes', color: '#4545F5' },
+  { id: 7, name: 'Tech', color: '#A545F5' },
+  { id: 8, name: 'Home', color: '#F545F5' },
+  { id: 9, name: 'Transport', color: '#F545A2' },
+  { id: 10, name: 'Education', color: '#F54545' },
+  { id: 11, name: 'Gift', color: '#F5A245' },
+  { id: 12, name: 'Other', color: '#F5F545' },
+]
 
 
 const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
@@ -47,6 +85,7 @@ const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
       operation_type: "1",
       description: "",
       installments: "1",
+      tags: [],
     },
   });
     const triggerOperationTypeField = watch('operation_type', '1');
@@ -220,15 +259,72 @@ const TransactionForm = ({ style, onCancel }: TransactionFormProps) => {
             )}
             name="description"
           />
-          <ThemedView style={styles.tagContainer}>
-            <Tag
-              id={1}
-              name="Food"
-              mainColor="#F54545"
-              backgroundColor="#8F1616"
-            />
-            <ThemedText style={{color: "#838383", fontSize: 12}}>+ New Tag</ThemedText>
-          </ThemedView>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <ThemedView style={{flexDirection: 'row-reverse'}}>
+                <MultiSelect
+                  style={{flex: 1}}
+                  data={tags_data}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  labelField={"name"}
+                  valueField={"id"}
+                  value={value}
+                  placeholder='+ Add tag'
+                  placeholderStyle={{color: "#838383"}}
+
+                  renderRightIcon={() => undefined}
+                  
+                  search
+                  searchField='name'
+                  searchPlaceholder='Search tags'
+                  
+                  flatListProps={{contentContainerStyle: {alignItems: 'center', flexDirection: 'row', flexWrap: 'wrap', gap: 8}}}
+                  
+                  activeColor='transparent'
+                  containerStyle={{backgroundColor: "#2E2E2E", borderRadius: 8, padding: 12, borderColor: "#838383", borderWidth: 1}}
+                  inputSearchStyle={{borderColor: "#838383", borderRadius: 8, color: "white", margin: 0}}
+
+                  renderItem={(item, selected) => {
+                    const tag = (
+                      <Tag
+                        id={item.id}
+                        name={item.name}
+                        mainColor={item.color}
+                        backgroundColor={darkenHexColor(item.color)}
+                      />
+                    )
+                    if (!selected) {
+                      return tag;
+                    }
+                    return (
+                      <View style={{
+                        borderRadius: 20,
+                        borderColor: 'white',
+                        borderWidth: 2,
+                        padding: 2,
+                      }}>
+                        {tag}
+                      </View>
+                    )
+                  }}
+                  renderSelectedItem={(item, unSelect) => (
+                    <TouchableWithoutFeedback onPress={() => unSelect && unSelect(item)} style={{marginRight: 8}}>
+                      <Tag
+                        id={item.id}
+                        name={item.name}
+                        mainColor={item.color}
+                        backgroundColor={darkenHexColor(item.color)}
+                      />
+                    </TouchableWithoutFeedback>
+                  )}
+                />
+              </ThemedView>
+            )}
+            name="tags"
+          />
           <Button title="Submit" onPress={handleSubmit(onSubmit)} />
         </>
       )}
@@ -278,12 +374,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     color: "white",
-  },
-  tagContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
   },
   bottomSheetHeader: {
     flexDirection: "row",
