@@ -9,10 +9,4 @@ interface CategoryInterface {
   color: string;
 }
 
-export interface CreateCategoryInterface {
-  name: string;
-  icon: keyof typeof Feather.glyphMap;
-  color: string;
-}
-
 export default CategoryInterface;

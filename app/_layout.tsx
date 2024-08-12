@@ -74,6 +74,20 @@ export default function RootLayout() {
                   ),
                 }}
               />
+              <Stack.Screen
+                name="categoryForm"
+                options={{
+                  title: "New category",
+                  presentation: "modal",
+                  headerStyle: { backgroundColor: '#2E2E2E'},
+                  headerLeft: () => (
+                    <Link style={{color: "white"}} href='../'>Cancel</Link>
+                  ),
+                  headerRight: () => (
+                    <Link style={{color: "white", fontWeight: 'bold'}} href='../'>Save</Link>
+                  ),
+                }}
+              />
             </Stack>
           </ThemeProvider>
         </GestureHandlerRootView>

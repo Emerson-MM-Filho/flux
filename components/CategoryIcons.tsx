@@ -1,39 +1,27 @@
-import { StyleSheet, FlatList, TextInput, ScrollView, View } from 'react-native'
+import { StyleSheet, FlatList, TextInput } from 'react-native'
 import { Icon } from './Icon'
 import { ThemedView } from './ThemedView'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import CategoryInterface, { CreateCategoryInterface, availableIcons } from '@/interfaces/category';
+import CategoryInterface from '@/interfaces/category';
 import { useState } from 'react';
 import { ThemedText } from './ThemedText';
 import { router } from 'expo-router';
 
-const availableColors = [
-  '#FF0000', '#FFA500', '#FFFF00', '#008000', '#0000FF', '#4B0082', '#EE82EE', '#FFC0CB', '#FFD700', '#FF8C00',
-  '#FF1493', '#FF00FF', '#00FF00', '#00FFFF', '#0000FF', '#8A2BE2', '#A52A2A', '#D2691E', '#FF7F50', '#6495ED',
-  '#DC143C', '#00FFFF', '#00008B', '#008B8B', '#B8860B', '#A9A9A9', '#006400', '#BDB76B', '#8B008B', '#556B2F',
-];
-
-
 interface CategoryIconsProps {
-  categorySelectedCallback: () => void;
-  cancelCallback: () => void;
   categories: CategoryInterface[];
   setCategories: (categories: CategoryInterface[]) => void;
-  setSelectedCategory: (category: CategoryInterface) => void;
   selectedCategory: CategoryInterface | null;
+  setSelectedCategory: (category: CategoryInterface) => void;
 }
 
 export const CategoryIcons = ({
   categories,
-  setSelectedCategory,
   selectedCategory,
+  setSelectedCategory,
   setCategories,
-  categorySelectedCallback,
-  cancelCallback
 }: CategoryIconsProps) => {
   const [contentToShow, setContentToShow] = useState("quickSelect");
   const [filteredCategories, setFilteredCategories] = useState<CategoryInterface[]>(categories);
-  const [newCategory, setNewCategory] = useState<CreateCategoryInterface | null>(null);
   const [searchText, setSearchText] = useState('');
   const columns = 5;
 
@@ -59,7 +47,6 @@ export const CategoryIcons = ({
     setFilteredCategories(newCategories);
     setCategories(newCategories);
     setSearchText('');
-    categorySelectedCallback();
   }
 
   const handleSearchInputChange = (e: any) => {
@@ -77,35 +64,12 @@ export const CategoryIcons = ({
     setContentToShow("quickSelect");
     setFilteredCategories(categories);
     setSearchText('');
-    cancelCallback();
   }
 
-  const handleTouchCreateCategory = () => {
-    if (searchText === '') return;
-
-
-    // TODO: An AI should be able to suggest a color and icon based on the category name
-    setNewCategory({
-      name: searchText,
-      icon: 'plus',
-      color: '#262626',
-    });
-    setSearchText('');
-    setContentToShow("newCategory");
-  }
-
-  const handleCategoryNameChange = (e: any) => {
-    if (!newCategory) return;
-
-    setNewCategory({
-      ...newCategory,
-      name: e.nativeEvent.text,
-    });
-  }
-
-  const cancelCategoryCreation = () => {
-    setNewCategory(null);
-    setContentToShow("search");
+  const handleCreateCategory = () => {
+    console.debug('Opening category form with name:', searchText);
+    router.setParams({ category_name: searchText });
+    router.push("categoryForm");
   }
 
   return (
@@ -177,105 +141,15 @@ export const CategoryIcons = ({
           />
           {
             searchText !== '' && (
-              <TouchableOpacity onPress={() => handleTouchCreateCategory()} style={styles.newCategoryContainer}>
+              <TouchableOpacity
+                onPress={handleCreateCategory}
+                style={styles.newCategoryContainer}
+              >
                 <ThemedText style={styles.newCategoryText}>+ Add "{searchText}"</ThemedText>
               </TouchableOpacity>
             )
           }
         </>
-      )}
-      {contentToShow === "newCategory" && (
-        <ThemedView>
-          <ThemedView style={styles.searchingHeaderStyle}>
-            <ThemedText>Create category</ThemedText>
-            <TouchableOpacity onPress={cancelCategoryCreation}>
-              <ThemedText style={{ color: '#838383' }}>Cancel</ThemedText>
-            </TouchableOpacity>
-          </ThemedView>
-          <ThemedView style={{gap: 16, marginTop: 16}}>
-            <ThemedView style={styles.newCategoryPreviewContainer}>
-              <Icon
-                iconName={newCategory?.icon}
-                iconSize={32}
-                containerStyle={{
-                  ...styles.newCategoryPreviewIcon,
-                  backgroundColor: newCategory?.color
-                }}
-              />
-              <TextInput
-                style={styles.categoryNameInput}
-                value={newCategory?.name}
-                onChange={handleCategoryNameChange}
-                placeholder='Category name'
-                selectTextOnFocus
-              />
-            </ThemedView>
-            <ThemedText>Icon</ThemedText>
-            <ScrollView horizontal style={{backgroundColor: "#454444", borderRadius: 8}}>
-              <FlatList
-                data={availableIcons.slice(0, 30)}
-                keyExtractor={item => item}
-                numColumns={10}
-                columnWrapperStyle={{ justifyContent: 'space-between'}}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      if (!newCategory) return;
-                      setNewCategory({
-                        ...newCategory,
-                        icon: item,
-                      });
-                    }}
-                    key={item}
-                  >
-                    <Icon
-                      iconName={item}
-                      iconColor={newCategory?.icon === item ? newCategory.color : undefined}
-                      containerStyle={{
-                        backgroundColor: newCategory?.icon === item ? '#262626' : '#838383',
-                        borderWidth: newCategory?.icon === item ? 2 : 0,
-                        borderColor: newCategory?.color,
-                        margin: 4,
-                      }}
-                    />
-                  </TouchableOpacity>
-                )}
-              />
-            </ScrollView>
-            <ThemedText>Color</ThemedText>
-            <ScrollView horizontal style={{backgroundColor: "#454444", borderRadius: 8}}>
-              <FlatList
-                data={availableColors}
-                keyExtractor={item => item}
-                numColumns={10}
-                columnWrapperStyle={{ justifyContent: 'space-between'}}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      if (!newCategory) return;
-                      setNewCategory({
-                        ...newCategory,
-                        color: item,
-                      });
-                    }}
-                    key={item}
-                  >
-                    <View style={{
-                        backgroundColor: item,
-                        borderWidth: newCategory?.color === item ? 2 : 0,
-                        borderColor: newCategory?.color === item ? "white" : "transparent",
-                        margin: 4,
-                        width: 50,
-                        height: 50,
-                        borderRadius: 25,
-                      }}
-                    ></View>
-                  </TouchableOpacity>
-                )}
-              />
-            </ScrollView>
-          </ThemedView>
-        </ThemedView>
       )}
     </ThemedView>
   )

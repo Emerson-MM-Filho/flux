@@ -1,11 +1,10 @@
 import React, { useState } from "react"
-import { StyleSheet, TextInput, FlatList } from "react-native"
+import { StyleSheet, TextInput, View } from "react-native"
 import { ThemedText } from "@/components/ThemedText"
 import { ThemedView } from "@/components/ThemedView"
-import { ScrollView } from "react-native-gesture-handler"
 import CategoryInterface from '@/interfaces/category';
 import { useCategories } from "@/hooks/useCategories"
-import { TouchableOpacity } from "react-native-gesture-handler"
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler"
 import { Icon } from "@/components/Icon"
 import { router } from "expo-router"
 
@@ -14,20 +13,6 @@ export default function searchCategory() {
   const categories = useCategories();
   const [filteredCategories, setFilteredCategories] = useState<CategoryInterface[]>(categories);
   const [searchText, setSearchText] = useState('');
-  const columns = 5;
-
-  function createRows(data: any[], columns: number) {
-    const rows = Math.floor(data.length / columns);
-    let lastRowElements = data.length - (rows * columns);
-    while (lastRowElements !== columns) {
-      if (lastRowElements === 0) {
-        break;
-      }
-      data.push(null);
-      lastRowElements += 1;
-    }
-    return data;
-  }
 
   const handleSearchInputChange = (e: any) => {
     if (e.nativeEvent.text === '') {
@@ -41,53 +26,70 @@ export default function searchCategory() {
   }
 
   const handleCategorySelection = (category: CategoryInterface) => {
-    console.debug(`Selected category: ${category.id}-${category.name}`);
     router.back()
     router.setParams({ category_id: category.id.toString() });
   }
 
+  const handleCreateCategory = () => {
+    console.debug('Creating category with name:', searchText);
+    router.push("categoryForm");
+    router.setParams({ category_name: searchText });
+  }
+
   return (
     <ThemedView style={styles.mainContainer}>
-      <ScrollView>
-        <TextInput
-          onChange={handleSearchInputChange}
-          placeholder='Search for a category'
-          style={styles.searchInput}
-        />
-        <FlatList
-          data={createRows(filteredCategories, columns)}
-          keyExtractor={item => item ? item.id.toString() : Math.random().toString()}
-          numColumns={columns}
-          columnWrapperStyle={{ justifyContent: 'space-between' }}
-          renderItem={({ item }) => {
-            let cardStyle = styles.categoryCard;
-            if (!item) cardStyle = { ...styles.categoryCard, backgroundColor: 'transparent' };
-            return (
+        <View style={styles.searchContainer}>
+          <TextInput
+            onChange={handleSearchInputChange}
+            placeholder='Search for a category'
+            style={styles.searchInput}
+            value={searchText}
+          />
+          {
+            searchText !== '' && (
               <TouchableOpacity
-                key={item ? item.id : 'empty'}
-                style={cardStyle}
-                onPress={() => item && handleCategorySelection(item)}
+                style={styles.clearSearchButton}
+                onPress={() => {
+                  setSearchText('');
+                  setFilteredCategories(categories);
+                }}
               >
-                {item && (
-                  <Icon iconName={item.icon} containerStyle={{ backgroundColor: item.color }} />
-                )}
-                {item && (
-                  <ThemedText style={styles.categoryName}>
-                    {(item.name.length > 5) ? item.name.slice(0, 5) + '...' : item.name}
-                  </ThemedText>
-                )}
+                <ThemedText>Clear</ThemedText>
               </TouchableOpacity>
-            );
-          }}
-        />
+            )
+          }
+        </View>
+        {
+          searchText === '' && (
+            <ScrollView>
+              {filteredCategories.map(item => {
+                return (
+                  <TouchableOpacity
+                    key={item ? item.id : 'empty'}
+                    style={styles.categoryCard}
+                    onPress={() => item && handleCategorySelection(item)}
+                  >
+                    {item && (
+                      <Icon iconName={item.icon} containerStyle={{ backgroundColor: item.color }} />
+                    )}
+                    {item && (
+                      <ThemedText style={styles.categoryName}>
+                        {item.name}
+                      </ThemedText>
+                    )}
+                  </TouchableOpacity>
+                )
+              })}
+            </ScrollView>
+          )
+        }
         {
           searchText !== '' && (
-            <TouchableOpacity style={styles.newCategoryContainer}>
+            <TouchableOpacity style={styles.newCategoryContainer} onPress={handleCreateCategory}>
               <ThemedText style={styles.newCategoryText}>+ Add "{searchText}"</ThemedText>
             </TouchableOpacity>
           )
         }
-      </ScrollView>
     </ThemedView>
   );
 }
@@ -109,12 +111,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+  searchContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   searchInput: {
     backgroundColor: '#262626',
     color: 'white',
     borderRadius: 8,
     padding: 8,
     marginBottom: 8,
+    flexGrow: 1,
+  },
+  clearSearchButton: {
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: '#262626',
+    alignSelf: 'flex-start',
   },
   categoryCard: {
     padding: 8,
@@ -122,6 +135,8 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     backgroundColor: '#262626',
     alignItems: 'center',
+    flexDirection: 'row',
+    gap: 8,
   },
   categoryName: {
     textAlign: 'center',

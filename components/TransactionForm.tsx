@@ -72,7 +72,6 @@ const tags_data = [
 
 
 const TransactionForm = ({ style, selectedCategoryId }: TransactionFormProps) => {
-  const [isSearchingCategory, setIsSearchingCategory] = useState(false);
   const [categories, setCategories] = useState<CategoryInterface[]>(useCategories());
   const [selectedCategory, setSelectedCategory] = useState<CategoryInterface>(categories.find(category => category.id === selectedCategoryId) || categories[0]);
   const [showInstallmentsField, setShowInstallmentsField] = useState(true);
@@ -98,11 +97,12 @@ const TransactionForm = ({ style, selectedCategoryId }: TransactionFormProps) =>
     defaultValues: {
       amount: "0,00",
       due_date: new Date(),
+      category: selectedCategory.id,
       name: "",
-      bank_account: "1",
-      operation_type: "1",
+      bank_account: bank_account_data[0].value,
+      operation_type: operation_type_data[0].value,
       description: "",
-      installments: "1",
+      installments: 1,
       tags: [],
     },
   });
@@ -126,229 +126,229 @@ const TransactionForm = ({ style, selectedCategoryId }: TransactionFormProps) =>
 
   return (
     <ThemedView style={{...styles.mainContainer, ...style}}>
-      <CategoryIcons
-        categorySelectedCallback={() => setIsSearchingCategory(false)}
-        cancelCallback={() => setIsSearchingCategory(false)}
-        categories={categories}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-        setCategories={setCategories}
+      <Controller
+        control={control}
+        render={() => (
+          <CategoryIcons
+            categories={categories}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={(category) => setSelectedCategory(category)}
+            setCategories={setCategories}
+          />
+        )}
+        name="category"
       />
-      {!isSearchingCategory && (
-        <>
-          <ThemedView style={styles.between}>
-            <ThemedText style={{color: selectedCategory.color}}>{selectedCategory.name}</ThemedText>
-            <Controller
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { onChange, value, ref } }) => {
-                if (showDatePicker) {
-                  return (
-                    <BottomSheet snapPoints={['50%']} >
-                      <BottomSheetView>
-                        <RNDateTimePicker
-                          value={new Date()}
-                          mode="date"
-                          display='spinner'
-                          onChange={(_, selectedDate) => {
-                            onChange(_)
-                          }}
-                          style={{backgroundColor: "transparent"}}
-                        />
-                      </BottomSheetView>
-                    </BottomSheet>
-                  )
-                }
+      <ThemedView style={styles.between}>
+        <ThemedText style={{color: selectedCategory.color}}>{selectedCategory.name}</ThemedText>
+        <Controller
+          control={control}
+          rules={{ required: true }}
+          render={({ field: { onChange, value, ref } }) => {
+            if (showDatePicker) {
+              return (
+                <BottomSheet snapPoints={['50%']} >
+                  <BottomSheetView>
+                    <RNDateTimePicker
+                      value={new Date()}
+                      mode="date"
+                      display='spinner'
+                      onChange={(_, selectedDate) => {
+                        onChange(_)
+                      }}
+                      style={{backgroundColor: "transparent"}}
+                    />
+                  </BottomSheetView>
+                </BottomSheet>
+              )
+            }
 
-                return (
-                  <TouchableWithoutFeedback onPress={() => setShowDatePicker(true)}>
-                    <ThemedText style={{color: "#838383"}}>{value.toLocaleDateString()}</ThemedText>
-                  </TouchableWithoutFeedback>
-                )
-              }}
-              name="due_date"
+            return (
+              <TouchableWithoutFeedback onPress={() => setShowDatePicker(true)}>
+                <ThemedText style={{color: "#838383"}}>{value.toLocaleDateString()}</ThemedText>
+              </TouchableWithoutFeedback>
+            )
+          }}
+          name="due_date"
+        />
+      </ThemedView>
+      <Controller
+        control={control}
+        rules={{ required: true }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <ThemedView style={styles.amountContainer}>
+            <ThemedText style={styles.amountText}>- $</ThemedText>
+            <TextInput
+              placeholder="Amount"
+              placeholderTextColor="white"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              style={{...styles.amountText, ...styles.amountInput}}
+              keyboardType='decimal-pad'
+              selectTextOnFocus
             />
           </ThemedView>
-          <Controller
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <ThemedView style={styles.amountContainer}>
-                <ThemedText style={styles.amountText}>- $</ThemedText>
-                <TextInput
-                  placeholder="Amount"
-                  placeholderTextColor="white"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  style={{...styles.amountText, ...styles.amountInput}}
-                  keyboardType='decimal-pad'
-                  selectTextOnFocus
-                />
-              </ThemedView>
-            )}
-            name="amount"
+        )}
+        name="amount"
+      />
+      {errors.amount && <ThemedText>This is required.</ThemedText>}
+      <ThemedView style={styles.typeContainer}>
+        <ThemedText style={styles.typeItem}>Fixo</ThemedText>
+        <ThemedText style={{...styles.typeItem, backgroundColor: "#B4B4B4", color: "#262626"}}>Variável</ThemedText>
+        <ThemedText style={styles.typeItem}>Extra</ThemedText>
+      </ThemedView>
+      <Controller
+        control={control}
+        rules={{ required: true }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            placeholder="Name"
+            placeholderTextColor="white"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            style={styles.textInput}
           />
-          {errors.amount && <ThemedText>This is required.</ThemedText>}
-          <ThemedView style={styles.typeContainer}>
-            <ThemedText style={styles.typeItem}>Fixo</ThemedText>
-            <ThemedText style={{...styles.typeItem, backgroundColor: "#B4B4B4", color: "#262626"}}>Variável</ThemedText>
-            <ThemedText style={styles.typeItem}>Extra</ThemedText>
-          </ThemedView>
-          <Controller
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                placeholder="Name"
-                placeholderTextColor="white"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                style={styles.textInput}
-              />
-            )}
-            name="name"
+        )}
+        name="name"
+      />
+      <Controller
+        control={control}
+        rules={{ required: true }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <DropdownComponent
+            data={bank_account_data}
+            onBlur={onBlur}
+            onChange={onChange}
+            value={value}
+            leftIcon={currentBankAccountImage}
+            selectedTextStyle={{  marginLeft: 8 }}
           />
-          <Controller
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <DropdownComponent
-                data={bank_account_data}
-                onBlur={onBlur}
-                onChange={onChange}
-                value={value}
-                leftIcon={currentBankAccountImage}
-                selectedTextStyle={{  marginLeft: 8 }}
-              />
-            )}
-            name="bank_account"
-          />
-          <ThemedView style={styles.operationContainer}>
+        )}
+        name="bank_account"
+      />
+      <ThemedView style={styles.operationContainer}>
+        <Controller
+          control={control}
+          rules={{ required: true }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <DropdownComponent
+              data={operation_type_data}
+              onBlur={onBlur}
+              onChange={onChange}
+              value={value}
+              leftIcon={showInstallmentsField ? {name: 'credit-card'} : {name: 'dollar-sign'}}
+              dropdownStyle={{flex: 1}}
+            />
+          )}
+          name="operation_type"
+        />
+        {
+          showInstallmentsField && (
             <Controller
               control={control}
               rules={{ required: true }}
               render={({ field: { onChange, onBlur, value } }) => (
-                <DropdownComponent
-                  data={operation_type_data}
+                <TextInput
+                  placeholder="Installments"
+                  placeholderTextColor="white"
                   onBlur={onBlur}
-                  onChange={onChange}
-                  value={value}
-                  leftIcon={showInstallmentsField ? {name: 'credit-card'} : {name: 'dollar-sign'}}
-                  dropdownStyle={{flex: 1}}
+                  onChangeText={onChange}
+                  value={value.toString()}
+                  style={[styles.textInput, {flex: 1}]}
+                  keyboardType='number-pad'
                 />
               )}
-              name="operation_type"
+              name="installments"
             />
-            {
-              showInstallmentsField && (
-                <Controller
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      placeholder="Installments"
-                      placeholderTextColor="white"
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      style={[styles.textInput, {flex: 1}]}
-                      keyboardType='number-pad'
-                    />
-                  )}
-                  name="installments"
-                />
-              )
-            }
+          )
+        }
 
+      </ThemedView>
+      <Controller
+        control={control}
+        rules={{ required: true }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            placeholder="Description"
+            placeholderTextColor="white"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            style={{...styles.textInput, height: 120}}
+            multiline={true}
+            numberOfLines={4}
+          />
+        )}
+        name="description"
+      />
+      <Controller
+        control={control}
+        rules={{ required: true }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <ThemedView style={{flexDirection: 'row-reverse'}}>
+            <MultiSelect
+              style={{flex: 1}}
+              data={tags_data}
+              onChange={onChange}
+              onBlur={onBlur}
+              labelField={"name"}
+              valueField={"id"}
+              value={value}
+              placeholder='+ Add tag'
+              placeholderStyle={{color: "#838383"}}
+
+              renderRightIcon={() => undefined}
+              
+              search
+              searchField='name'
+              searchPlaceholder='Search tags'
+              
+              flatListProps={{contentContainerStyle: {gap: 8}}}
+              
+              activeColor='transparent'
+              containerStyle={{backgroundColor: "#2E2E2E", borderRadius: 8, padding: 12, borderColor: "#838383", borderWidth: 1}}
+              inputSearchStyle={{borderColor: "#838383", borderRadius: 8, color: "white", margin: 0}}
+
+              renderItem={(item, selected) => {
+                const tag = (
+                  <Tag
+                    id={item.id}
+                    name={item.name}
+                    mainColor={item.color}
+                    backgroundColor={darkenHexColor(item.color)}
+                  />
+                )
+                if (!selected) {
+                  return tag;
+                }
+                return (
+                  <View style={{
+                    borderRadius: 20,
+                    borderColor: 'white',
+                    borderWidth: 2,
+                    padding: 2,
+                  }}>
+                    {tag}
+                  </View>
+                )
+              }}
+              renderSelectedItem={(item, unSelect) => (
+                <TouchableWithoutFeedback onPress={() => unSelect && unSelect(item)} style={{marginRight: 8}}>
+                  <Tag
+                    id={item.id}
+                    name={item.name}
+                    mainColor={item.color}
+                    backgroundColor={darkenHexColor(item.color)}
+                  />
+                </TouchableWithoutFeedback>
+              )}
+            />
           </ThemedView>
-          <Controller
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                placeholder="Description"
-                placeholderTextColor="white"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                style={{...styles.textInput, height: 120}}
-                multiline={true}
-                numberOfLines={4}
-              />
-            )}
-            name="description"
-          />
-          <Controller
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <ThemedView style={{flexDirection: 'row-reverse'}}>
-                <MultiSelect
-                  style={{flex: 1}}
-                  data={tags_data}
-                  onChange={onChange}
-                  onBlur={onBlur}
-                  labelField={"name"}
-                  valueField={"id"}
-                  value={value}
-                  placeholder='+ Add tag'
-                  placeholderStyle={{color: "#838383"}}
-
-                  renderRightIcon={() => undefined}
-                  
-                  search
-                  searchField='name'
-                  searchPlaceholder='Search tags'
-                  
-                  flatListProps={{contentContainerStyle: {gap: 8}}}
-                  
-                  activeColor='transparent'
-                  containerStyle={{backgroundColor: "#2E2E2E", borderRadius: 8, padding: 12, borderColor: "#838383", borderWidth: 1}}
-                  inputSearchStyle={{borderColor: "#838383", borderRadius: 8, color: "white", margin: 0}}
-
-                  renderItem={(item, selected) => {
-                    const tag = (
-                      <Tag
-                        id={item.id}
-                        name={item.name}
-                        mainColor={item.color}
-                        backgroundColor={darkenHexColor(item.color)}
-                      />
-                    )
-                    if (!selected) {
-                      return tag;
-                    }
-                    return (
-                      <View style={{
-                        borderRadius: 20,
-                        borderColor: 'white',
-                        borderWidth: 2,
-                        padding: 2,
-                      }}>
-                        {tag}
-                      </View>
-                    )
-                  }}
-                  renderSelectedItem={(item, unSelect) => (
-                    <TouchableWithoutFeedback onPress={() => unSelect && unSelect(item)} style={{marginRight: 8}}>
-                      <Tag
-                        id={item.id}
-                        name={item.name}
-                        mainColor={item.color}
-                        backgroundColor={darkenHexColor(item.color)}
-                      />
-                    </TouchableWithoutFeedback>
-                  )}
-                />
-              </ThemedView>
-            )}
-            name="tags"
-          />
-          <Button title="Submit" onPress={handleSubmit(onSubmit)} />
-        </>
-      )}
+        )}
+        name="tags"
+      />
+      <Button title="Submit" onPress={handleSubmit(onSubmit)} />
     </ThemedView>
   );
 };
