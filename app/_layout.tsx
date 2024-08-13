@@ -58,9 +58,6 @@ export default function RootLayout() {
                   headerLeft: () => (
                     <Link style={{color: "white"}} href='../'>Cancel</Link>
                   ),
-                  headerRight: () => (
-                    <Link style={{color: "white", fontWeight: 'bold'}} href='../'>Save</Link>
-                  ),
                 }}
               />
               <Stack.Screen
@@ -82,9 +79,6 @@ export default function RootLayout() {
                   headerStyle: { backgroundColor: '#2E2E2E'},
                   headerLeft: () => (
                     <Link style={{color: "white"}} href='../'>Cancel</Link>
-                  ),
-                  headerRight: () => (
-                    <Link style={{color: "white", fontWeight: 'bold'}} href='../'>Save</Link>
                   ),
                 }}
               />

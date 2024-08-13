@@ -2,12 +2,13 @@ import React from "react"
 import { StyleSheet, View } from "react-native"
 import CategoryForm from "@/components/CategoryForm"
 import { useLocalSearchParams } from "expo-router"
+import CategoryInterface from "@/interfaces/category"
 
 export default function categoryForm() {
   const params = useLocalSearchParams<{
     id?: string;
     category_name?: string;
-    icon?: string;
+    icon?: CategoryInterface['icon'];
     color?: string;
   }>();
 
@@ -17,7 +18,7 @@ export default function categoryForm() {
         categorie={{
           id: params.id ? parseInt(params.id) : undefined,
           name: params.category_name,
-          // icon: params.icon ,
+          icon: params.icon ,
           color: params.color
         }}
       />

@@ -133,7 +133,6 @@ const TransactionForm = ({ style, selectedCategoryId }: TransactionFormProps) =>
             categories={categories}
             selectedCategory={selectedCategory}
             setSelectedCategory={(category) => setSelectedCategory(category)}
-            setCategories={setCategories}
           />
         )}
         name="category"

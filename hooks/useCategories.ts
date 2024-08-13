@@ -1,6 +1,6 @@
 import CategoryInterface from "@/interfaces/category";
 
-export const useCategories = () => [
+const CATEGORIES = [
   {
     id: 0,
     name: "Market",
@@ -55,4 +55,16 @@ export const useCategories = () => [
     icon: 'github',
     color: "#F5A445",
   }
-] as CategoryInterface[];
+] as CategoryInterface[]
+
+export const useCategories = () => {
+  console.debug(`Categories amount: ${CATEGORIES.length}`)
+  return CATEGORIES
+};
+
+
+export const addCategory = (category: CategoryInterface) => {
+  console.debug(`Adding category '${category.name}' to CATEGORIES`)
+  const categories = CATEGORIES.filter(c => c.id !== category.id)
+  categories.push(category)
+}

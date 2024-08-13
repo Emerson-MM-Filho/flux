@@ -2,6 +2,7 @@ import React from 'react'
 
 import { useColorScheme } from '@/hooks/useColorScheme'
 import HomeScreen from './index'
+import SearchCategory from '../searchCategory'
 
 import { createBottomTabNavigator, } from '@react-navigation/bottom-tabs'
 import { Image, View, Dimensions } from 'react-native'
@@ -45,7 +46,7 @@ export default function TabLayout() {
           </View>
         )
       }}/>
-      <Tab.Screen name="Investiments" component={HomeScreen} options={{
+      <Tab.Screen name="Categories" component={SearchCategory} options={{
         tabBarIcon: ({ focused, color, size}) => (
           <View>
             <Image

@@ -5,13 +5,17 @@ import { ScrollView } from "react-native-gesture-handler"
 import { useLocalSearchParams } from "expo-router"
 
 export default function transactionForm() {
-  const params = useLocalSearchParams<{category_id: string}>();
+  const params = useLocalSearchParams<{
+    category_id?: string
+  }>();
+
+  console.debug(`category_id: '${params.category_id}'`)
 
   return (
     <ScrollView style={styles.mainContainer}> 
       <TransactionForm
         style={{marginBottom: "50%"}}
-        selectedCategoryId={typeof params.category_id === 'string' ? parseInt(params.category_id) : undefined}
+        selectedCategoryId={params.category_id ? parseInt(params.category_id) : undefined}
       />
     </ScrollView>
   );

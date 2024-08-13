@@ -9,7 +9,7 @@ import { Icon } from "@/components/Icon"
 import { router } from "expo-router"
 
 
-export default function searchCategory() {
+export default function SearchCategory() {
   const categories = useCategories();
   const [filteredCategories, setFilteredCategories] = useState<CategoryInterface[]>(categories);
   const [searchText, setSearchText] = useState('');
@@ -38,60 +38,60 @@ export default function searchCategory() {
 
   return (
     <ThemedView style={styles.mainContainer}>
-        <View style={styles.searchContainer}>
-          <TextInput
-            onChange={handleSearchInputChange}
-            placeholder='Search for a category'
-            style={styles.searchInput}
-            value={searchText}
-          />
-          {
-            searchText !== '' && (
-              <TouchableOpacity
-                style={styles.clearSearchButton}
-                onPress={() => {
-                  setSearchText('');
-                  setFilteredCategories(categories);
-                }}
-              >
-                <ThemedText>Clear</ThemedText>
-              </TouchableOpacity>
-            )
-          }
-        </View>
-        {
-          searchText === '' && (
-            <ScrollView>
-              {filteredCategories.map(item => {
-                return (
-                  <TouchableOpacity
-                    key={item ? item.id : 'empty'}
-                    style={styles.categoryCard}
-                    onPress={() => item && handleCategorySelection(item)}
-                  >
-                    {item && (
-                      <Icon iconName={item.icon} containerStyle={{ backgroundColor: item.color }} />
-                    )}
-                    {item && (
-                      <ThemedText style={styles.categoryName}>
-                        {item.name}
-                      </ThemedText>
-                    )}
-                  </TouchableOpacity>
-                )
-              })}
-            </ScrollView>
-          )
-        }
+      <View style={styles.searchContainer}>
+        <TextInput
+          onChange={handleSearchInputChange}
+          placeholder='Search for a category'
+          style={styles.searchInput}
+          value={searchText}
+        />
         {
           searchText !== '' && (
-            <TouchableOpacity style={styles.newCategoryContainer} onPress={handleCreateCategory}>
-              <ThemedText style={styles.newCategoryText}>+ Add "{searchText}"</ThemedText>
+            <TouchableOpacity
+              style={styles.clearSearchButton}
+              onPress={() => {
+                setSearchText('');
+                setFilteredCategories(categories);
+              }}
+            >
+              <ThemedText>Clear</ThemedText>
             </TouchableOpacity>
           )
         }
+      </View>
+      {
+        searchText === '' && (
+          <ScrollView>
+            {filteredCategories.map(item => {
+              return (
+                <TouchableOpacity
+                  key={item ? item.id : 'empty'}
+                  style={styles.categoryCard}
+                  onPress={() => item && handleCategorySelection(item)}
+                >
+                  {item && (
+                    <Icon iconName={item.icon} containerStyle={{ backgroundColor: item.color }} />
+                  )}
+                  {item && (
+                    <ThemedText style={styles.categoryName}>
+                      {item.name}
+                    </ThemedText>
+                  )}
+                </TouchableOpacity>
+              )
+            })}
+          </ScrollView>
+        )
+      }
+      {
+        searchText !== '' && (
+          <TouchableOpacity style={styles.newCategoryContainer} onPress={handleCreateCategory}>
+            <ThemedText style={styles.newCategoryText}>+ Add "{searchText}"</ThemedText>
+          </TouchableOpacity>
+        )
+      }
     </ThemedView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
